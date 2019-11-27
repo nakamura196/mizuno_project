@@ -23,7 +23,7 @@ def preprocess_image(hojo_name):
 #各行を切った画像を入力する必要がある
 def move_measure(hojo_name):
     letter_size = 80
-    around_diff_limit = 800
+    around_diff_limit = 6.8
 
     #準備
     im = Image.open("./intermediates/pp_{}.jpg".format(hojo_name))
@@ -66,7 +66,7 @@ def move_measure(hojo_name):
     print("moving pixels")
     #重心に基づいて画素を動かす
     for y in range(height):
-        if center_x > cx[y] and abs(around_diff[y]) >= around_diff_limit:
+        if center_x > cx[y] and abs(around_diff[y]) >= around_diff_limit*width:
             x_max = width - center_x + cx[y]
             for x in range(x_max):
                 r = pixel_list[y][x][0]
@@ -75,7 +75,7 @@ def move_measure(hojo_name):
                 im.putpixel((x + center_x - cx[y], y), (r, g, b))
             for x in range(center_x - cx[y]):
                 im.putpixel((x, y), (0, 0, 0))
-        elif center_x < cx[y] and abs(around_diff[y]) >= around_diff_limit:
+        elif center_x < cx[y] and abs(around_diff[y]) >= around_diff_limit*width:
             x_max = width - cx[y] + center_x
             for x in range(x_max):
                 r = pixel_list[y][x + cx[y] - center_x][0]
@@ -90,5 +90,3 @@ def move_measure(hojo_name):
 
 preprocess_image("resized")
 move_measure("resized")
-preprocess_image("resized1")
-move_measure("resized1")
