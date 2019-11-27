@@ -2,15 +2,32 @@ import numpy as np
 import os
 from PIL import Image, ImageFilter
 
+#前処理
+def preprocess_image(hojo_name, page):
+    boundary = 400
+
+    im = Image.open("./images/{}/p{}/resized.jpg".format(hojo_name, page)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
+    w, h = im.size
+
+    print("preprocessing page {}...".format(page))
+    #画素値がboundary以下を黒にする
+    for x in range(w):
+        for y in range(h):
+            px = sum(im.getpixel((x, y)))
+            if px < boundary:
+                im.putpixel((x, y), (0, 0, 0))
+
+    if not os.path.exists("./intermediates/{}".format(hojo_name)):
+        os.mkdir("./intermediates/{}/".format(hojo_name))
+    im.save("./intermediates/{}/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page))
+
 #とりあえず黒地に白文字のものを対象とする
 #各行を切った画像を入力する必要がある
-def move_to_center(image_name):
+def move_to_center(hojo_name, page, line):
     letter_size = 80
 
     #準備
-    #最終的にはwidthは各行で入力されるものになりそう（始点と終点的な）
-    #heightはyの極値で自動的に決定する
-    im = Image.open("./intermediates/pp_{}.jpg".format(image_name))
+    im = Image.open("./intermediates/{}/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
     width, height = im.size
     n = letter_size
     center_x = int(width/2)
@@ -39,7 +56,11 @@ def move_to_center(image_name):
             for x in range(width):
                 cx_y_above += sum(pixel_list[y][x]) * x
                 cx_y_below += sum(pixel_list[y][x])
+        if cx_y_below == 0:
+            return
+
         cx.append(int(cx_y_above/cx_y_below))
+
 
     print("moving pixels")
     #重心に基づいて画素を動かす
@@ -64,26 +85,7 @@ def move_to_center(image_name):
                 im.putpixel((x, y), (0, 0, 0))
 
     im = im.convert("L")
-    im.save("./output/centered_{}.jpg".format(image_name))
 
-def preprocess_image(image_name):
-    boundary = 400
-
-    im = Image.open("./input/{}.jpg".format(image_name)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
-    w, h = im.size
-
-    print("preprocessing...")
-    #画素値がboundary以下を黒にする
-    for x in range(w):
-        for y in range(h):
-            px = sum(im.getpixel((x, y)))
-            if px < boundary:
-                im.putpixel((x, y), (0, 0, 0))
-
-    im.save("./intermediates/pp_{}.jpg".format(image_name))
-
-#preprocess_image("resized2")
-#move_to_center("resized1")
-
-#for i in range(7):
-#    preprocess_image("images-{}".format(i))
+    if not os.path.exists("./output/{}/".format(hojo_name)):
+        os.mkdir("./output/{}/".format(hojo_name))
+    im.save("./output/{}/centered_{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))

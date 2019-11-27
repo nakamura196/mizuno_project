@@ -1,4 +1,6 @@
 from PIL import Image
+import numpy as np
+from scipy import signal
 
 #黒地の法帖限定
 def hojo_init(hojo_img_path, relative_line_interval):
@@ -10,15 +12,15 @@ def hojo_init(hojo_img_path, relative_line_interval):
     color_x = [0 for i in range(width)]
     color_y = [0 for i in range(height)]
 
-    for x in range():
+    for x in range(width):
         for y in range(height):
             r, g, b = im.getpixel((x, y))
             color_x[x] += r+g+b
             color_y[y] += r+g+b
 
-    return color_x, color_y, line_interval
+    return color_x, color_y, line_interval, height
 
-def detect_horizon(color_y):
+def detect_horizon(color_y, height):
     #y方向の切り出し座標y1, y2を見つける
     y1, y2 = 0, 0
     divide_val = int(sum(color_y)/len(color_y))
