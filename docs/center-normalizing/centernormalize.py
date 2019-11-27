@@ -6,7 +6,7 @@ boundary = 450
 
 #とりあえず黒地に白文字のものを対象とする
 #各行を切った画像を入力する必要がある
-def detect_center():
+def detect_center(image_name):
     #準備
     im = Image.open()
     n = SIZE_OF_LETTER
@@ -17,8 +17,8 @@ def detect_center():
     for y in range(height):
         rgb_vals = []
         for x in range(width):
-            px = im.getpixel((x, y))
-            rgb_vals.append(px)
+            r, g, b = im.getpixel((x, y))
+            rgb_vals.append(r+g+b)
         pixel_list.append(rgb_vals)
 
     #各yの重心を決定
@@ -40,6 +40,8 @@ def detect_center():
             elif center_x < cx[y]:
                 func()
 
+    im.save("./output/centered_{}.jpg".format(image_name))
+
 def preprocess_image(image_name):
     im = Image.open("./{}.jpg".format(image_name))
     w, h = im.size　
@@ -53,6 +55,6 @@ def preprocess_image(image_name):
 
     #グレイスケール変換
     im = im.convert("L")
-    im.save("./output/pp_{}.jpg".format(image_name))
+    im.save("./intermediates/pp_{}.jpg".format(image_name))
 
     return im
