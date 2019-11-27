@@ -9,8 +9,9 @@ letter_size = 80
 #各行を切った画像を入力する必要がある
 def move_to_center(image_name):
     #準備
-    im1 = Image.open("./intermediates/pp_{}.jpg".format(image_name))
-    im = im1.convert("RGB")
+    #最終的にはwidthは各行で入力されるものになりそう（始点と終点的な）
+    #heightはyの極値で自動的に決定する
+    im = Image.open("./intermediates/pp_{}.jpg".format(image_name))
     width, height = im.size
     n = letter_size
     center_x = int(width/2)
@@ -67,8 +68,7 @@ def move_to_center(image_name):
     im.save("./output/centered_{}.jpg".format(image_name))
 
 def preprocess_image(image_name):
-    im1 = Image.open("./input/{}.jpg".format(image_name))
-    im = im1.convert("RGB").filter(ImageFilter.MedianFilter(size=3))
+    im = Image.open("./input/{}.jpg".format(image_name)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
 
     print("preprocessing...")
@@ -81,5 +81,8 @@ def preprocess_image(image_name):
 
     im.save("./intermediates/pp_{}.jpg".format(image_name))
 
-preprocess_image("resized1")
-move_to_center("resized1")
+preprocess_image("resized2")
+#move_to_center("resized1")
+
+#for i in range(7):
+#    preprocess_image("images-{}".format(i))
