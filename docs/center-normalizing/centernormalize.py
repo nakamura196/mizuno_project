@@ -2,12 +2,11 @@ import numpy as np
 import os
 from PIL import Image, ImageFilter
 
-boundary = 400
-letter_size = 80
-
 #とりあえず黒地に白文字のものを対象とする
 #各行を切った画像を入力する必要がある
 def move_to_center(image_name):
+    letter_size = 80
+
     #準備
     #最終的にはwidthは各行で入力されるものになりそう（始点と終点的な）
     #heightはyの極値で自動的に決定する
@@ -68,6 +67,8 @@ def move_to_center(image_name):
     im.save("./output/centered_{}.jpg".format(image_name))
 
 def preprocess_image(image_name):
+    boundary = 400
+
     im = Image.open("./input/{}.jpg".format(image_name)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
 
@@ -81,7 +82,7 @@ def preprocess_image(image_name):
 
     im.save("./intermediates/pp_{}.jpg".format(image_name))
 
-preprocess_image("resized2")
+#preprocess_image("resized2")
 #move_to_center("resized1")
 
 #for i in range(7):
