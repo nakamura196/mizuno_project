@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from PIL import Image
+from PIL import Image, ImageFilter
 
 boundary = 400
 letter_size = 80
@@ -60,14 +60,15 @@ def move_to_center(image_name):
                 g = pixel_list[y][x + cx[y] - center_x][1]
                 b = pixel_list[y][x + cx[y] - center_x][2]
                 im.putpixel((x, y), (r, g, b))
-            for x in range(x_max+1, width):
+            for x in range(x_max, width):
                 im.putpixel((x, y), (0, 0, 0))
 
+    im = im.convert("L")
     im.save("./output/centered_{}.jpg".format(image_name))
 
 def preprocess_image(image_name):
     im1 = Image.open("./input/{}.jpg".format(image_name))
-    im = im1.convert("RGB")
+    im = im1.convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
 
     print("preprocessing...")
@@ -78,7 +79,6 @@ def preprocess_image(image_name):
             if px < boundary:
                 im.putpixel((x, y), (0, 0, 0))
 
-    #グレイスケール変換
     im.save("./intermediates/pp_{}.jpg".format(image_name))
 
 preprocess_image("resized1")
