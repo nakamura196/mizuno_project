@@ -25,9 +25,10 @@ def hojo_line_centering(hojo_name):
         print("Page {} line detection began".format(page))
         #準備
         hojo_path   = "./images/{}/p{}/".format(hojo_name, page)
-        hojo_img_path  = "." + hojo_path+"{}-p{}.jpg".format(hojo_name, page)
-        relative_line_interval = rintervals[hojo_img_path]
-        color_x, color_y, line_interval = cut.hojo_init(hojo_path, relative_line_interval)
+        rinterval_arg  = "." + hojo_path+"{}-p{}.jpg".format(hojo_name, page)
+        hojo_img_path = hojo_path+"resized.jpg"
+        relative_line_interval = rintervals[rinterval_arg]
+        color_x, color_y, line_interval = cut.hojo_init(hojo_img_path, relative_line_interval)
         y1, y2 = cut.detect_horizon(color_y)
         x_line_list = cut.detect_vertical(color_x, line_interval)
         print("detected lines")

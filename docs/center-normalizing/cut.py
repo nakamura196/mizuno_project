@@ -1,8 +1,8 @@
 from PIL import Image
 
 #黒地の法帖限定
-def hojo_init(hojo_path, relative_line_interval):
-    im = Image.open(hojo_path)
+def hojo_init(hojo_img_path, relative_line_interval):
+    im = Image.open(hojo_img_path)
     width, height = im.size
 
     line_interval = int(width*relative_line_interval)
