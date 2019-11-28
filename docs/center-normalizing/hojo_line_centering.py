@@ -31,25 +31,40 @@ def hojo_line_centering(hojo_name):
         relative_line_interval = rintervals[rinterval_arg]
 
         #前処理
+        if not os.path.exists("./intermediates/{}/".format(hojo_name)):
+            os.mkdir("./intermediates/{}/".format(hojo_name))
+        if not os.path.exists("./intermediates/{}/pp/".format(hojo_name)):
+            os.mkdir("./intermediates/{}/pp/".format(hojo_name))
         centernormalize.preprocess_image(hojo_name, page)
 
         #行探知と上下の決定
         print("detecting lines")
-        hojo_img_path = "./intermediates/{}/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page)
+        hojo_img_path = "./intermediates/{}/pp/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page)
         color_x, color_y, line_interval, height = cut.hojo_init(hojo_img_path, relative_line_interval)
         y1, y2 = cut.detect_horizon(color_y, height)
         x_line_list = cut.detect_vertical(color_x, line_interval)
 
         print("Page {} centering began".format(page))
         for i in range(len(x_line_list)-1):
-            print("Page {} line {} centering began".format(page, i+1))
+            #1、2、最後の部分は文字がないから飛ばしちゃう
+            if i < 2 or i == len(x_line_list)-2:
+                print("Page {} line {} is skipped")
+                continue
+
+            print("Page {} line {} centering".format(page, i+1))
 
             #画像の複製
             x1, x2 = x_line_list[i], x_line_list[i+1]
             im = Image.open(hojo_img_path)
             copied_im = im.copy()
             cropped_im = copied_im.crop((x1, y1, x2, y2))
-            cropped_im.save("./intermediates/{}/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, i+1))
+            if not os.path.exists("./intermediates/{}/lines/".format(hojo_name)):
+                os.mkdir("./intermediates/{}/lines/".format(hojo_name))
+            cropped_im.save("./intermediates/{}/lines/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, i+1))
+
+            #出力場所
+            if not os.path.exists("./output/{}/".format(hojo_name)):
+                os.mkdir("./output/{}/".format(hojo_name))
 
             #中心位置正規化
             centernormalize.move_to_center(hojo_name, page, i+1)
@@ -57,4 +72,4 @@ def hojo_line_centering(hojo_name):
 
         print("--------------------------------------------------------")
 
-hojo_line_centering("偽絳帖 三 [A005936-03]")
+hojo_line_centering("偽絳帖 四 [A005936-04]")

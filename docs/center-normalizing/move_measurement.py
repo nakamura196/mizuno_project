@@ -57,6 +57,11 @@ def move_measure(hojo_name):
                 cx_y_below += sum(pixel_list[y][x])
         cx.append(int(cx_y_above/cx_y_below))
 
+    for y in range(height):
+        im.putpixel((center_x, y), (255, 0, 0))
+        im.putpixel((cx[y], y), (0, 255, 0))
+
+    """
     around_diff = [0 for _ in range(height)]
 
     for y0 in range(height):
@@ -84,9 +89,9 @@ def move_measure(hojo_name):
                 im.putpixel((x, y), (r, g, b))
             for x in range(x_max, width):
                 im.putpixel((x, y), (0, 0, 0))
-
+    """
     im.save("./output/revised_measured_{}.jpg".format(hojo_name))
 
 
-preprocess_image("resized")
-move_measure("resized")
+preprocess_image("forfilter")
+move_measure("forfilter")

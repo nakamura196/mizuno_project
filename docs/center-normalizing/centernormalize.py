@@ -4,10 +4,17 @@ from PIL import Image, ImageFilter
 
 #前処理
 def preprocess_image(hojo_name, page):
-    boundary = 400
 
     im = Image.open("./images/{}/p{}/resized.jpg".format(hojo_name, page)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
+
+    #最終的にはline_intervalに応じてboundaryを変えるかもしれない
+    boundary = 400
+
+    #画像サイズが十分大きかったらフィルターをかける
+    #多分ここも最終的にはline_intervalに応じて変わることになる
+    if w >= 90:
+        im.filter(ImageFilter.MedianFilter(size=3))
 
     print("preprocessing page {}...".format(page))
     #画素値がboundary以下を黒にする
@@ -17,17 +24,16 @@ def preprocess_image(hojo_name, page):
             if px < boundary:
                 im.putpixel((x, y), (0, 0, 0))
 
-    if not os.path.exists("./intermediates/{}".format(hojo_name)):
-        os.mkdir("./intermediates/{}/".format(hojo_name))
-    im.save("./intermediates/{}/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page))
+    im.save("./intermediates/{}/pp/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page))
 
 #とりあえず黒地に白文字のものを対象とする
 #各行を切った画像を入力する必要がある
 def move_to_center(hojo_name, page, line):
     letter_size = 80
+    around_diff_limit = 6.8
 
     #準備
-    im = Image.open("./intermediates/{}/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
+    im = Image.open("./intermediates/{}/lines/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
     width, height = im.size
     n = letter_size
     center_x = int(width/2)
@@ -61,11 +67,18 @@ def move_to_center(hojo_name, page, line):
 
         cx.append(int(cx_y_above/cx_y_below))
 
+    #周辺の中心位置からの距離を保存
+    around_diff = [0 for _ in range(height)]
+
+    for y0 in range(height):
+        for y in range(max(y0-n, 0), min(height, y0+n)):
+            around_diff[y0] += cx[y] - center_x
 
     print("moving pixels")
     #重心に基づいて画素を動かす
+    #周りがあまり中心から離れていないことがaround_diffからわかる場合は処理は行わない
     for y in range(height):
-        if center_x > cx[y]:
+        if center_x > cx[y] and abs(around_diff[y]) >= around_diff_limit*width:
             x_max = width - center_x + cx[y]
             for x in range(x_max):
                 r = pixel_list[y][x][0]
@@ -74,7 +87,7 @@ def move_to_center(hojo_name, page, line):
                 im.putpixel((x + center_x - cx[y], y), (r, g, b))
             for x in range(center_x - cx[y]):
                 im.putpixel((x, y), (0, 0, 0))
-        elif center_x < cx[y]:
+        elif center_x < cx[y] and abs(around_diff[y]) >= around_diff_limit*width:
             x_max = width - cx[y] + center_x
             for x in range(x_max):
                 r = pixel_list[y][x + cx[y] - center_x][0]
@@ -86,6 +99,4 @@ def move_to_center(hojo_name, page, line):
 
     im = im.convert("L")
 
-    if not os.path.exists("./output/{}/".format(hojo_name)):
-        os.mkdir("./output/{}/".format(hojo_name))
     im.save("./output/{}/centered_{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
