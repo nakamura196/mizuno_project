@@ -14,7 +14,7 @@ def resize_hojo(hojo_name, page):
 
 
 
-hojo_name = "偽絳帖 三 [A005936-03]"
+hojo_name = "星鳳楼帖 卯 [A005935-04]"#"偽絳帖 三 [A005936-03]"
 hojo_folder_path = "./images/{}/".format(hojo_name)
 contents    = os.listdir(hojo_folder_path)
 if ".DS_Store" in contents:

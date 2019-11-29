@@ -5,6 +5,7 @@ from PIL import Image, ImageFilter
 #前処理
 def preprocess_image(iter_):
     hojo_name, page = iter_[0], iter_[1]
+    print("Page {} preprocessing started".format(page))
 
     im = Image.open("./images/{}/p{}/resized.jpg".format(hojo_name, page)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
@@ -33,16 +34,16 @@ def preprocess_image(iter_):
 #とりあえず黒地に白文字のものを対象とする
 #各行を切った画像を入力する必要がある
 def move_to_center(hojo_name, page, line):
-    letter_size = 80
-    around_diff_limit = 6.8
-
     #準備
     im = Image.open("./intermediates/{}/lines/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
     width, height = im.size
     n = letter_size
     center_x = int(width/2)
 
-    print("at Page {} line {} measuring rgb_vals".format(page, line))
+    letter_size = width
+    around_diff_limit = 6.8
+
+    print("at Page {} line {}: Measuring rgb_vals".format(page, line))
     #画素値をリストに保存する
     pixel_list = []
     for y in range(height):
@@ -56,7 +57,7 @@ def move_to_center(hojo_name, page, line):
             y_list.append(rgb_vals)
         pixel_list.append(y_list)
 
-    print("at Page {} line {} calculating gravity point".format(page, line))
+    print("at Page {} line {}: Calculating gravity point".format(page, line))
     #各yの重心を決定
     cx = []
     for y0 in range(height):
@@ -67,6 +68,9 @@ def move_to_center(hojo_name, page, line):
                 cx_y_above += sum(pixel_list[y][x]) * x
                 cx_y_below += sum(pixel_list[y][x])
         if cx_y_below == 0:
+            print("at Page {} line {}: ZerodivisionError happened. Picture was saved with no centering".format(page, line))
+            im = im.convert("L")
+            im.save("./output/{}/centered_{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
             return
 
         cx.append(int(cx_y_above/cx_y_below))
@@ -78,7 +82,7 @@ def move_to_center(hojo_name, page, line):
         for y in range(max(y0-n, 0), min(height, y0+n)):
             around_diff[y0] += cx[y] - center_x
 
-    print("at Page {} line {} moving pixels".format(page, line))
+    print("at Page {} line {}: Moving pixels".format(page, line))
     #重心に基づいて画素を動かす
     #周りがあまり中心から離れていないことがaround_diffからわかる場合は処理は行わない
     for y in range(height):

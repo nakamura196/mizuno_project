@@ -19,19 +19,20 @@ def hojo_line_centering(iter_):
     relative_line_interval = rintervals[rinterval_arg]
 
     #行探知と上下の決定
-    print("detecting lines")
+    print("at Page {}: detecting lines...".format(page))
     hojo_img_path = "./intermediates/{}/pp/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page)
-    color_x, color_y, line_interval, height = cut.hojo_init(hojo_img_path, relative_line_interval) #ここ
+    color_x, color_y, line_interval, height = cut.hojo_init(hojo_img_path, relative_line_interval)
     y1, y2 = cut.detect_horizon(color_y, height)
     x_line_list = cut.detect_vertical(color_x, line_interval)
 
     print("Page {} centering began".format(page))
     for i in range(len(x_line_list)-1):
+        """
         #1、2、最後の部分は文字がないから飛ばしちゃう
-        if i == 0 or i >= len(x_line_list)-3:
+        if i == 0 or i > len(x_line_list)-3:
             print("Page {} line {} is skipped".format(page, i+1))
             continue
-
+        """
         print("Page {} line {} centering".format(page, i+1))
 
         #画像の複製
@@ -43,9 +44,8 @@ def hojo_line_centering(iter_):
 
         #中心位置正規化
         centernormalize.move_to_center(hojo_name, page, i+1)
-        print("Moved center")
+        print("at Page {} line {}: Moved center".format(page, i+1))
 
-    print("--------------------------------------------------------")
 
 def main(hojo_name):
     #読み込み準備
@@ -80,4 +80,4 @@ def main(hojo_name):
     with Pool(processes=3) as pool:
         pool.map(hojo_line_centering, iter_)
 
-main("偽絳帖 四 [A005936-04]")
+main("星鳳楼帖 卯 [A005935-04]")
