@@ -41,5 +41,6 @@ def detect_vertical(color_x, line_interval):
     x_line_list = localmins[0].tolist()
     x_line_list.append(0)
     x_line_list.sort()
+    x_line_list.reverse()
 
     return x_line_list

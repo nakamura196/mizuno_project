@@ -54,7 +54,7 @@ def hojo_line_centering(hojo_name):
             print("Page {} line {} centering".format(page, i+1))
 
             #画像の複製
-            x1, x2 = x_line_list[i], x_line_list[i+1]
+            x1, x2 = x_line_list[i+1], x_line_list[i] #縦書きの行に合わせるためx_line_listを逆ソートしてるので、これも逆になる
             im = Image.open(hojo_img_path)
             copied_im = im.copy()
             cropped_im = copied_im.crop((x1, y1, x2, y2))
