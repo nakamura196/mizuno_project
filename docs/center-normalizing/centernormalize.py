@@ -3,7 +3,8 @@ import os
 from PIL import Image, ImageFilter
 
 #前処理
-def preprocess_image(hojo_name, page):
+def preprocess_image(iter_):
+    hojo_name, page = iter_[0], iter_[1]
 
     im = Image.open("./images/{}/p{}/resized.jpg".format(hojo_name, page)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
@@ -18,7 +19,6 @@ def preprocess_image(hojo_name, page):
     elif w >= 150:
         im.filter(ImageFilter.MedianFilter(size=5))
 
-    print("preprocessing page {}...".format(page))
     #画素値がboundary以下を黒にする
     for x in range(w):
         for y in range(h):
@@ -27,6 +27,8 @@ def preprocess_image(hojo_name, page):
                 im.putpixel((x, y), (0, 0, 0))
 
     im.save("./intermediates/{}/pp/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page))
+
+    print("finished preprocessing page {}".format(page))
 
 #とりあえず黒地に白文字のものを対象とする
 #各行を切った画像を入力する必要がある
@@ -40,7 +42,7 @@ def move_to_center(hojo_name, page, line):
     n = letter_size
     center_x = int(width/2)
 
-    print("measuring rgb_vals")
+    print("at Page {} line {} measuring rgb_vals".format(page, line))
     #画素値をリストに保存する
     pixel_list = []
     for y in range(height):
@@ -54,7 +56,7 @@ def move_to_center(hojo_name, page, line):
             y_list.append(rgb_vals)
         pixel_list.append(y_list)
 
-    print("calculating gravity point")
+    print("at Page {} line {} calculating gravity point".format(page, line))
     #各yの重心を決定
     cx = []
     for y0 in range(height):
@@ -76,7 +78,7 @@ def move_to_center(hojo_name, page, line):
         for y in range(max(y0-n, 0), min(height, y0+n)):
             around_diff[y0] += cx[y] - center_x
 
-    print("moving pixels")
+    print("at Page {} line {} moving pixels".format(page, line))
     #重心に基づいて画素を動かす
     #周りがあまり中心から離れていないことがaround_diffからわかる場合は処理は行わない
     for y in range(height):
