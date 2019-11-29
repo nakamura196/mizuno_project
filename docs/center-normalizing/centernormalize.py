@@ -15,6 +15,8 @@ def preprocess_image(hojo_name, page):
     #多分ここも最終的にはline_intervalに応じて変わることになる
     if w >= 90:
         im.filter(ImageFilter.MedianFilter(size=3))
+    elif w >= 150:
+        im.filter(ImageFilter.MedianFilter(size=5))
 
     print("preprocessing page {}...".format(page))
     #画素値がboundary以下を黒にする

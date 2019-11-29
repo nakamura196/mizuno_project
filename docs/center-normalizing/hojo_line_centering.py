@@ -47,8 +47,8 @@ def hojo_line_centering(hojo_name):
         print("Page {} centering began".format(page))
         for i in range(len(x_line_list)-1):
             #1、2、最後の部分は文字がないから飛ばしちゃう
-            if i < 2 or i == len(x_line_list)-2:
-                print("Page {} line {} is skipped")
+            if i == 0 or i >= len(x_line_list)-3:
+                print("Page {} line {} is skipped".format(page, i+1))
                 continue
 
             print("Page {} line {} centering".format(page, i+1))
@@ -72,4 +72,4 @@ def hojo_line_centering(hojo_name):
 
         print("--------------------------------------------------------")
 
-hojo_line_centering("偽絳帖 四 [A005936-04]")
+hojo_line_centering("偽絳帖 三 [A005936-03]")
