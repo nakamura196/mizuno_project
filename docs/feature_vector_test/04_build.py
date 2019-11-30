@@ -27,7 +27,7 @@ for file_index in range(len(files)):
     map[file_index] = id
 
 t.build(trees)
-t.save('data/index.ann') # モデルを保存することも可能です。
+t.save('data/index.ann')
 
 f2 = open('data/file_index_map.json', 'w')
 json.dump(map, f2)

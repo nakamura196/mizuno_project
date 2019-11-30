@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import numpy
 import glob
 from annoy import AnnoyIndex
@@ -6,7 +9,7 @@ import json
 import os
 
 
-##　Indexの読み込み　##
+
 
 file_index_map = {}
 with open("data/file_index_map.json") as f:
@@ -18,7 +21,7 @@ with open("data/file_index_map.json") as f:
 dims = 2048
 
 t = AnnoyIndex(dims, metric='angular')
-t.load('data/index.ann') # モデルを読み込むことも可能です。
+t.load('data/index.ann')
 
 ########
 
@@ -78,5 +81,4 @@ for id in sorted(result_map):
     result_arr.append(result_map[id])
 
 fw = open("data/predict/result.json", 'w')
-json.dump(result_arr, fw, ensure_ascii=False, indent=4,
-        sort_keys=True, separators=(',', ': '))
+json.dump(result_arr, fw, ensure_ascii=False, indent=4, sort_keys=True, separators=(',', ': '))
