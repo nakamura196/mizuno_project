@@ -4,28 +4,31 @@ from PIL import Image, ImageFilter
 
 #前処理
 def preprocess_image(iter_):
-    hojo_name, page = iter_[0], iter_[1]
+    hojo_name = iter_[0]
+    page = iter_[1]
+    line_interval = iter_[2]
     print("Page {} preprocessing started".format(page))
 
     im = Image.open("./images/{}/p{}/resized.jpg".format(hojo_name, page)).convert("RGB").filter(ImageFilter.MedianFilter(size=3))
     w, h = im.size
 
-    #最終的にはline_intervalに応じてboundaryを変えるかもしれない
-    boundary = 400
-
     #画像サイズが十分大きかったらフィルターをかける
     #多分ここも最終的にはline_intervalに応じて変わることになる
-    if w >= 90:
-        im.filter(ImageFilter.MedianFilter(size=3))
-    elif w >= 150:
+    if w >= 150:
         im.filter(ImageFilter.MedianFilter(size=5))
+    elif w >= 90:
+        im.filter(ImageFilter.MedianFilter(size=3))
+
+    #最終的にはline_intervalに応じてboundaryを変えるかもしれない
+    boundary = 100
+    im = im.convert("L")
 
     #画素値がboundary以下を黒にする
     for x in range(w):
         for y in range(h):
-            px = sum(im.getpixel((x, y)))
-            if px < boundary:
-                im.putpixel((x, y), (0, 0, 0))
+            brightness = im.getpixel((x, y))
+            if brightness < boundary:
+                im.putpixel((x, y), 0)
 
     im.save("./intermediates/{}/pp/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page))
 
@@ -37,10 +40,10 @@ def move_to_center(hojo_name, page, line):
     #準備
     im = Image.open("./intermediates/{}/lines/{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
     width, height = im.size
-    n = letter_size
+    n = around_letter_size
     center_x = int(width/2)
 
-    letter_size = width
+    around_letter_size = width
     around_diff_limit = 6.8
 
     print("at Page {} line {}: Measuring rgb_vals".format(page, line))
@@ -49,12 +52,10 @@ def move_to_center(hojo_name, page, line):
     for y in range(height):
         y_list = []
         for x in range(width):
-            rgb_vals = []
-            r, g, b = im.getpixel((x, y))
-            rgb_vals.append(r)
-            rgb_vals.append(g)
-            rgb_vals.append(b)
-            y_list.append(rgb_vals)
+            brightness_vals = []
+            brightness = im.getpixel((x, y))
+            brightness_vals.append(brightness)
+            y_list.append(brightness)
         pixel_list.append(y_list)
 
     print("at Page {} line {}: Calculating gravity point".format(page, line))
@@ -65,13 +66,11 @@ def move_to_center(hojo_name, page, line):
         cx_y_below = 0
         for y in range(max(y0-n, 0), min(height, y0+n)):
             for x in range(width):
-                cx_y_above += sum(pixel_list[y][x]) * x
-                cx_y_below += sum(pixel_list[y][x])
+                cx_y_above += pixel_list[y][x] * x
+                cx_y_below += pixel_list[y][x]
         if cx_y_below == 0:
-            print("at Page {} line {}: ZerodivisionError happened. Picture was saved with no centering".format(page, line))
-            im = im.convert("L")
-            im.save("./output/{}/centered_{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
-            return
+            cx_y_above = center_x
+            cx_y_below = 1
 
         cx.append(int(cx_y_above/cx_y_below))
 
@@ -89,22 +88,16 @@ def move_to_center(hojo_name, page, line):
         if center_x > cx[y] and abs(around_diff[y]) >= around_diff_limit*width:
             x_max = width - center_x + cx[y]
             for x in range(x_max):
-                r = pixel_list[y][x][0]
-                g = pixel_list[y][x][1]
-                b = pixel_list[y][x][2]
-                im.putpixel((x + center_x - cx[y], y), (r, g, b))
+                brightness = pixel_list[y][x]
+                im.putpixel((x + center_x - cx[y], y), brightness)
             for x in range(center_x - cx[y]):
-                im.putpixel((x, y), (0, 0, 0))
+                im.putpixel((x, y), 0)
         elif center_x < cx[y] and abs(around_diff[y]) >= around_diff_limit*width:
             x_max = width - cx[y] + center_x
             for x in range(x_max):
-                r = pixel_list[y][x + cx[y] - center_x][0]
-                g = pixel_list[y][x + cx[y] - center_x][1]
-                b = pixel_list[y][x + cx[y] - center_x][2]
-                im.putpixel((x, y), (r, g, b))
+                brightness = pixel_list[y][x + cx[y] - center_x]
+                im.putpixel((x, y), brightness)
             for x in range(x_max, width):
-                im.putpixel((x, y), (0, 0, 0))
-
-    im = im.convert("L")
+                im.putpixel((x, y), 0)
 
     im.save("./output/{}/centered_{}-p{}-line_{}.jpg".format(hojo_name, hojo_name, page, line))
