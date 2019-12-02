@@ -1,5 +1,7 @@
 import cut
 import centernormalize
+import img_info
+import preprocessing
 import json, os
 from PIL import Image
 from multiprocessing import Pool
@@ -14,7 +16,7 @@ def hojo_line_centering(iter_):
     #切り出し行の決定
     print("at Page {}: detecting lines...".format(page))
     hojo_img_path = "./intermediates/{}/pp/pp_{}_p{}.jpg".format(hojo_name, hojo_name, page)
-    color_x, color_y, height = cut.calculate_hojo_brightness(hojo_img_path)
+    color_x, color_y, height = img_info.calculate_hojo_brightness(hojo_img_path)
     y1, y2 = cut.detect_horizon(color_y, height)
     x_line_list = cut.detect_vertical(color_x, line_interval)
 
@@ -63,10 +65,10 @@ def main(hojo_name):
     #前処理
     iter_ = []
     for page in range(1, page_leng+1):
-        iter_.append((hojo_name, page, cut.generate_letter_size(hojo_name, page)))
+        iter_.append((hojo_name, page, img_info.generate_letter_size(hojo_name, page)))
 
     with Pool(processes=3) as pool:
-        pool.map(centernormalize.preprocess_image, iter_)
+        pool.map(preprocessing.preprocess_image, iter_)
 
     return
 
@@ -74,4 +76,5 @@ def main(hojo_name):
     with Pool(processes=3) as pool:
         pool.map(hojo_line_centering, iter_)
 
-main("星鳳楼帖 寅 [A005935-03]")
+if __name__ == "__main__":
+    main("星鳳楼帖 寅 [A005935-03]")
