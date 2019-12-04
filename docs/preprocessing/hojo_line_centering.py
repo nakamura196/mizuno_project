@@ -70,8 +70,6 @@ def main(hojo_name):
     with Pool(processes=3) as pool:
         pool.map(filter.filter_image, iter_)
 
-    return
-
     #行検知と中心位置正規化
     with Pool(processes=3) as pool:
         pool.map(hojo_line_centering, iter_)
