@@ -1,7 +1,7 @@
 from PIL import Image, ImageFilter
 
 #前処理
-def preprocess_image(iter_):
+def filter_image(iter_):
     hojo_name = iter_[0]
     page = iter_[1]
     line_interval = iter_[2]
@@ -12,9 +12,9 @@ def preprocess_image(iter_):
 
     #画像サイズが十分大きかったらフィルターをかける
     #多分ここも最終的にはline_intervalに応じて変わることになる
-    if w >= 150:
+    if line_interval >= 150:
         im.filter(ImageFilter.MedianFilter(size=5))
-    elif w >= 90:
+    elif line_interval >= 90:
         im.filter(ImageFilter.MedianFilter(size=3))
 
     #最終的にはline_intervalに応じてboundaryを変えるかもしれない

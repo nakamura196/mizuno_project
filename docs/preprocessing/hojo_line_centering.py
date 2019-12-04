@@ -68,7 +68,7 @@ def main(hojo_name):
         iter_.append((hojo_name, page, img_info.generate_letter_size(hojo_name, page)))
 
     with Pool(processes=3) as pool:
-        pool.map(preprocessing.preprocess_image, iter_)
+        pool.map(filter.filter_image, iter_)
 
     return
 
