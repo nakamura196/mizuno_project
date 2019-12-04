@@ -4,4 +4,4 @@
 /docs/center-normalizing/output/
 /docs/center-normalizing/intermediates/
 /docs/center-normalizing/images/
-/docs/center-normalizing/__pycache__
+__pycache__/
