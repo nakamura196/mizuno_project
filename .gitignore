@@ -1,6 +1,7 @@
 .DS_Store
-output/
 input/
+output/
+>>>>>>> master
 intermediates/
 images/
 __pycache__/
