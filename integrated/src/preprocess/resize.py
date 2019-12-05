@@ -12,6 +12,8 @@ def resize_hojo(hojo_name, page):
     resized_hojo = hojo.resize((int(weight/RESIZE_RATIO),int(height/RESIZE_RATIO)))
     resized_hojo.save(hojo_path+"resized.jpg")
 
+    print("Resized {} Page {}".format(hojo_name, page))
+
 
 if __name__ == "__main__":
     hojo_name = "泉州本淳化閣帖 八 [A006099-05]"
