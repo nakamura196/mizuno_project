@@ -34,15 +34,13 @@ def detect_divideline(hojo_name, page, relative_line_interval, characterIsBlack)
     color_line_list.sort()
     color_line_list = color_line_list[::-1]
 
-    line_place = []
     #出力はリサイズしたものであることに注意！
+    output = []
     for i in range(len(color_line_list)-1):
         x1 = color_line_list[i+1]
         x2 = color_line_list[i]
         y1 = 0
         y2 = height
-        line_place.append([x1, x2, y1, y2])
+        output.append([x1, x2, y1, y2)
 
-    line_place_js = line_place.json.dumps(line_place)
-    with open("../../output/{}/line_place.json", "w") as f:
-        f.write(line_place_js)
+    return output

@@ -1,7 +1,8 @@
 from PIL import Image
 import os
+from multiprocessing import Pool
 
-def resize_hojo(hojo_name, page):
+def resize_page(hojo_name, page):
     RESIZE_RATIO = 3
 
     hojo_path = "../../input/images/{}/p{}/".format(hojo_name, page)
@@ -14,14 +15,15 @@ def resize_hojo(hojo_name, page):
 
     print("Resized {} Page {}".format(hojo_name, page))
 
-
-if __name__ == "__main__":
-    hojo_name = "泉州本淳化閣帖 八 [A006099-05]"
-    hojo_folder_path = "../../input/images/{}/".format(hojo_name)
-    contents    = os.listdir(hojo_folder_path)
+def resize_hojo(hojo_name):
+    contents    = os.listdir("../../input/images/{}/")
     if ".DS_Store" in contents:
         contents.remove(".DS_Store")
     page_leng   = len(contents)-1 #hojo.txtを数えないことに注意！
 
+    iter_ = []
     for page in range(1, page_leng+1):
-        resize_hojo(hojo_name, page)
+        iter_.append((hojo_name, page))
+
+    with Pool(processes=3) as pool:
+        pool.map(resize_page, iter_)

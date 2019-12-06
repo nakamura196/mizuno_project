@@ -59,7 +59,7 @@ def generate_rintervals(hojo_name):
     contents = os.listdir("../../output/{}/preprocessed/back_black/".format(hojo_name))
     if ".DS_Store" in contents:
         contents.remove(".DS_Store")
-    page_leng = len(contents)
+    page_leng = len(contents)-1 #hojo.txtを除くことに注意！
 
     for page in range(1, page_leng+1):
         print("Page {} request".format(page))
