@@ -41,6 +41,6 @@ def detect_divideline(hojo_name, page, relative_line_interval, characterIsBlack)
         x2 = color_line_list[i]
         y1 = 0
         y2 = height
-        output.append([x1, x2, y1, y2)
+        output.append([x1, x2, y1, y2])
 
     return output

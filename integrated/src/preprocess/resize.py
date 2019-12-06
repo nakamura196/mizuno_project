@@ -2,7 +2,9 @@ from PIL import Image
 import os
 from multiprocessing import Pool
 
-def resize_page(hojo_name, page):
+def resize_page(iter_):
+    hojo_name = iter_[0]
+    page = iter_[1]
     RESIZE_RATIO = 3
 
     hojo_path = "../../input/images/{}/p{}/".format(hojo_name, page)
@@ -16,7 +18,7 @@ def resize_page(hojo_name, page):
     print("Resized {} Page {}".format(hojo_name, page))
 
 def resize_hojo(hojo_name):
-    contents    = os.listdir("../../input/images/{}/")
+    contents    = os.listdir("../../input/images/{}/".format(hojo_name))
     if ".DS_Store" in contents:
         contents.remove(".DS_Store")
     page_leng   = len(contents)-1 #hojo.txtを数えないことに注意！

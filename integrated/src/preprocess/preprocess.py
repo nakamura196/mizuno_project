@@ -2,10 +2,12 @@ import detect_divideline
 import filter_backprocess
 import get_interval
 import resize
+import os, json
 from multiprocessing import Pool
+from PIL import Image
 
 if __name__ == "__main__":
-    hojo_name = ""
+    hojo_name = "偽絳帖 三 [A005936-03]"
     characterIsBlack = False
     contents    = os.listdir("../../input/images/{}/".format(hojo_name))
     if ".DS_Store" in contents:
@@ -13,17 +15,17 @@ if __name__ == "__main__":
     page_leng   = len(contents)-1 #hojo.txtを数えないことに注意！
 
     #画像をリサイズ（関数内でマルチプロセス化）
-    resize.resize_hojo(hojo_name)
+    #resize.resize_hojo(hojo_name)
 
     #GCPから文字サイズを取得
     #もうあったらやらない
-    if not os.path.join("../../output/{}/rinterval.json"):
+    if not os.path.exists("../../output/{}/rintervals.json".format(hojo_name)):
         get_interval.generate_rintervals(hojo_name)
 
     #中央値フィルターをかける
     ##まず準備
-    with open("../../output/{}/rinterval.json") as f:
-        rintervals = json.loads(f)
+    with open("../../output/{}/rintervals.json".format(hojo_name)) as f:
+        rintervals = json.load(f)
 
     iter_ = []
     for page in range(1, page_leng+1):

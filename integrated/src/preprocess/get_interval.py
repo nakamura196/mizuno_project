@@ -5,6 +5,7 @@ from google.cloud import automl_v1beta1
 from google.cloud.automl_v1beta1.proto import service_pb2
 from statistics import mean
 from PIL import Image
+import os, json
 
 # 'content' is base-64-encoded image data.
 def get_prediction(content, project_id, model_id):
@@ -18,7 +19,7 @@ def get_prediction(content, project_id, model_id):
 def calculate_line_interval(hojo_name, page):
 
     #ファイルを調達
-    with open("../../output/{}/preprocessed/back_black/bb_{}_p{}.jpg".format(hojo_name, hojo_name, page), 'rb') as ff:
+    with open("../../input/images/{}/p{}/resized.jpg".format(hojo_name, page), 'rb') as ff:
         content = ff.read()
 
     #Google Cloud Visionから物体検出してもらう
@@ -56,7 +57,7 @@ def calculate_line_interval(hojo_name, page):
 
 #法帖ごとにpredictionを実行
 def generate_rintervals(hojo_name):
-    contents = os.listdir("../../output/{}/preprocessed/back_black/".format(hojo_name))
+    contents = os.listdir("../../input/images/{}/".format(hojo_name))
     if ".DS_Store" in contents:
         contents.remove(".DS_Store")
     page_leng = len(contents)-1 #hojo.txtを除くことに注意！
