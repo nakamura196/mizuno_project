@@ -54,6 +54,7 @@ def calculate_line_interval(hojo_name, page):
 
     return relative_line_interval
 
+#法帖ごとにpredictionを実行
 def generate_rintervals(hojo_name):
     contents = os.listdir("../../output/{}/preprocessed/back_black/".format(hojo_name))
     if ".DS_Store" in contents:

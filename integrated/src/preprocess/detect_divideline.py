@@ -1,11 +1,10 @@
 import os
 from scipy import signal
-from PIL import Image, ImageOps, ImageDraw
+from PIL import Image, ImageDraw
 
-def detect_divideline(hojo_name, hojo_path, relative_line_interval, characterIsBlack):
+def detect_divideline(hojo_name, page, relative_line_interval, characterIsBlack):
     #準備
-    RESIZE_RATIO = 3
-    im              = Image.open("../../input/{}/p{}/resized.jpg".format(hojo_name, page))
+    im              = Image.open("../../output/{}/preprocessed/back_black/bb_{}_p{}.jpg".format(hojo_name, hojo_name, page))
     width, height   = im.size
     color           = [0 for i in range(width)]
     print("\tloaded resized image")
@@ -33,13 +32,17 @@ def detect_divideline(hojo_name, hojo_path, relative_line_interval, characterIsB
 
     color_line_list.append(0) #左端が切れないようにする
     color_line_list.sort()
+    color_line_list = color_line_list[::-1]
 
-    """
-    detected_lines  = []
+    line_place = []
+    #出力はリサイズしたものであることに注意！
     for i in range(len(color_line_list)-1):
-        retangle_w  = int(5*(color_line_list[i+1]-color_line_list[i]))
-        retangle    = "#xywh={},{},{},{}".format(int(RESIZE_RATIO*color_line_list[i]), 0, retangle_w, RESIZE_RATIO*height)
-        detected_lines.append(retangle)
+        x1 = color_line_list[i+1]
+        x2 = color_line_list[i]
+        y1 = 0
+        y2 = height
+        line_place.append([x1, x2, y1, y2])
 
-    return detected_lines
-    """
+    line_place_js = line_place.json.dumps(line_place)
+    with open("../../output/{}/line_place.json", "w") as f:
+        f.write(line_place_js)
