@@ -17,7 +17,7 @@ def generate_sameness(hojo_name1, hojo_name2):
 
     #割合試験を適用
     good = []
-    match_param = 0.6
+    match_param = 0.7
     point = 0
     for m,n in matches:
         if m.distance < match_param*n.distance:
