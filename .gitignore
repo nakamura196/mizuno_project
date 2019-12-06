@@ -4,3 +4,5 @@ output/
 intermediates/
 images/
 __pycache__/
+cmp_image/
+utils/*.jpg
