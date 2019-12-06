@@ -18,7 +18,7 @@ def get_prediction(content, project_id, model_id):
 def calculate_line_interval(hojo_name, page):
 
     #ファイルを調達
-    with open("../../input/{}/p{}/resized.jpg".format(hojo_name, page), 'rb') as ff:
+    with open("../../output/{}/preprocessed/back_black/bb_{}_p{}.jpg".format(hojo_name, hojo_name, page), 'rb') as ff:
         content = ff.read()
 
     #Google Cloud Visionから物体検出してもらう
@@ -53,3 +53,20 @@ def calculate_line_interval(hojo_name, page):
     print("Finished calculating line_interval")
 
     return relative_line_interval
+
+def generate_rintervals(hojo_name):
+    contents = os.listdir("../../output/{}/preprocessed/back_black/".format(hojo_name))
+    if ".DS_Store" in contents:
+        contents.remove(".DS_Store")
+    page_leng = len(contents)
+
+    for page in range(1, page_leng+1):
+        print("Page {} request".format(page))
+        relative_line_interval = calculate_line_interval(hojo_name, page)
+        rintervals["p{}".format(page)] = relative_line_interval
+        print("--------------------------------------------------------")
+    with open("../../output/{}/rintervals.json".format(hojo_name), "w") as f:
+        rint_json = json.dumps(rintervals)
+        f.write(rint_json)
+
+    print("Calculated relative_line_interval")
