@@ -62,6 +62,7 @@ def generate_rintervals(hojo_name):
         contents.remove(".DS_Store")
     page_leng = len(contents)-1 #hojo.txtを除くことに注意！
 
+    rintervals = {}
     for page in range(1, page_leng+1):
         print("Page {} request".format(page))
         relative_line_interval = calculate_line_interval(hojo_name, page)
