@@ -1,0 +1,31 @@
+{
+name: [
+{
+@language: "en",
+@value: "Similar Calligraphy Models Search"
+},
+{
+@language: "ja",
+@value: "法帖類似画像検索"
+}
+],
+description: [
+{
+@language: "en",
+@value: "Search for similar areas in inlines of other calligraphy models"
+},
+{
+@language: "ja",
+@value: "検索画像と類似した行部分を持つ法帖を検索。"
+}
+],
+provider: "",
+homepage: "",
+exportUrl: "",
+method: "POST",
+enctype: "multipart/form-data",
+paramMap: {
+image: "url"
+},
+openTab: true
+}
