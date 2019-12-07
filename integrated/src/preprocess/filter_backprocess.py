@@ -31,6 +31,7 @@ def make_back_black(iter_):
     hojo_name = iter_[0]
     page = iter_[1]
     line_interval = iter_[2]
+    characterIsBlack = iter_[3]
 
     if os.path.exists("../../output/{}/preprocessed/back_black/bb_{}_p{}.jpg".format(hojo_name, hojo_name, page)):
         print("Backprocessing {} page {} has already done".format(hojo_name, page))
@@ -41,15 +42,24 @@ def make_back_black(iter_):
     #最終的にはline_intervalに応じてboundaryを変えるかもしれない
     im = Image.open("../../output/{}/preprocessed/filtered/filtered_{}_p{}.jpg".format(hojo_name, hojo_name, page))
     width, height = im.size
-    boundary = 100
     im = im.convert("L")
 
-    #画素値がboundary以下を黒にする
-    for x in range(width):
-        for y in range(height):
-            brightness = im.getpixel((x, y))
-            if brightness < boundary:
-                im.putpixel((x, y), 0)
+    if characterIsBlack:
+        #白背景なら画素値がboundary以上を白にする
+        boundary = 155
+        for x in range(width):
+            for y in range(height):
+                brightness = im.getpixel((x, y))
+                if brightness > boundary:
+                    im.putpixel((x, y), 255)
+    else:
+        #黒背景なら画素値がboundary以下を黒にする
+        boundary = 100
+        for x in range(width):
+            for y in range(height):
+                brightness = im.getpixel((x, y))
+                if brightness < boundary:
+                    im.putpixel((x, y), 0)
 
     im.save("../../output/{}/preprocessed/back_black/bb_{}_p{}.jpg".format(hojo_name, hojo_name, page))
 
