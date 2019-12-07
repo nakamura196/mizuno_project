@@ -4,5 +4,5 @@ output/
 intermediates/
 images/
 __pycache__/
-cmp_image/
-utils/*.jpg
+utils/sample_akaze/*.jpg
+utils/sample_akaze/cmp_image
