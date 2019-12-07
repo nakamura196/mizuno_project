@@ -3,7 +3,7 @@ import create_manifest
 import os
 
 if __name__ == "__main__":
-    hojo_name = "泉州本淳化閣帖 八 [A006099-05]"
+    hojo_name = "星鳳楼帖 卯 [A005935-04]"
     characterIsBlack = False
 
     if not os.path.exists("../../output/{}/curated_lines".format(hojo_name)):
