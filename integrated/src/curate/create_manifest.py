@@ -9,7 +9,7 @@ def generate_line_place(page, lines, RESIZE_RATIO):
         x1, x2, y1, y2 = line[0], line[1], line[2], line[3]
         w = x2 - x1
         h = y2 - y1
-        line_description.append("#xywh={}, {}, {}, {}".format(RESIZE_RATIO*x1, y1, RESIZE_RATIO*w, RESIZE_RATIO*h))
+        line_description.append("#xywh={},{},{},{}".format(RESIZE_RATIO*x1, y1, RESIZE_RATIO*w, RESIZE_RATIO*h))
 
     return line_description
 
