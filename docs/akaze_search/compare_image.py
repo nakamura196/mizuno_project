@@ -3,6 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 import time
+from PIL import Image, ImageFilter
 
 #csvから特徴量を読み込む
 def read_des(csv_path):
@@ -14,6 +15,19 @@ def read_des(csv_path):
     des = des_int64.astype(np.uint8)
 
     return des
+
+def query_formatting(hojo_name):
+    im = Image.open("./query/{}.jpg".format(hojo_name))
+    im = im.convert("L").filter(ImageFilter.MedianFilter())
+    w, h = im.size
+    for x in range(w):
+        for y in range(h):
+            brightness = im.getpixel((x, y))
+            if brightness <= 100:
+                im.putpixel((x, y), 0)
+
+    im.save("./query/{}_q.jpg".format(hojo_name))
+    return "{}_q".format(hojo_name)
 
 def compare_image(query_name):
     #検索画像の読み込み
@@ -44,7 +58,7 @@ def compare_image(query_name):
             matches = bf.knnMatch(des, des_q, k=2)
 
             point = 0
-            match_param = 0.7
+            match_param = 0.65
             for m, n in matches:
                 if m.distance < match_param*n.distance:
                     point += 1
@@ -53,11 +67,11 @@ def compare_image(query_name):
     search_end = time.time()
     ranking.sort()
     ranking.reverse()
-    for i in range(5):
+    for i in range(10):
         print(ranking[i])
 
     print(search_end-search_start)
 
 
 if __name__ == "__main__":
-    compare_image("hojo4", "偽絳帖 三 [A005936-03]")
+    compare_image(query_formatting("hojo5"))
