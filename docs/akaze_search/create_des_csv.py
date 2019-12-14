@@ -22,7 +22,7 @@ def create_csv(hojo_name):
     for image in images:
         des = generate_des("./{}/{}".format(hojo_name, image))
         df = pd.DataFrame(des)
-        df.to_csv("./feature_vecs_csv/{}/{}".format(hojo_name, image.replace(".jpg", ".csv")))
+        df.to_csv("./feature_vecs_csv/{}/{}".format(hojo_name, image.replace(".jpg", ".csv")), header=False, index=False)
 
 if __name__ == "__main__":
     create_csv("偽絳帖 三 [A005936-03]")
