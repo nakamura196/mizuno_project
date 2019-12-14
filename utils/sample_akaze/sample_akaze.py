@@ -12,10 +12,11 @@ def generate_sameness(hojo_name1, hojo_name2):
     kp1, des1 = detector.detectAndCompute(img1, None)
     kp2, des2 = detector.detectAndCompute(img2, None)
 
-    return kp1, des1
     #特徴点の比較機
     bf = cv2.BFMatcher()
     matches = bf.knnMatch(des1,des2, k=2)
+
+    return matches
 
     #割合試験を適用
     good = []
@@ -43,7 +44,7 @@ def query_formatting(hojo_name):
     im.save("{}_q.jpg".format(hojo_name))
     return "{}_q".format(hojo_name)
 
-
+"""
 def time_check(hojo_name1, hojo_name2):
     start = time.time()
     img1 = cv2.imread('{}.jpg'.format(hojo_name1),0)
@@ -91,9 +92,15 @@ if ".DS_Store" in hojos:
 
 for hojo in hojos:
     hojo = hojo.replace(".jpg", "")
-    generate_sameness("hojo5", hojo)
-    kp1, des1 = generate_sameness(query_formatting("hojo5"), hojo)
-    print(len(kp1))
-    print(len(des1))
+    matches = generate_sameness(query_formatting("hojo5"), hojo)
+    for m, n in matches:
+        print(m.distance)
+        print(n.distance)
+
+        print("-------------------------------------------------------------------")
+    print(type(matches[0][0]))
+    print(type(matches[0][1]))
+    print("-------------------------------------------------------------------")
+    print(hojo)
+
     break
-"""

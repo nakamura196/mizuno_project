@@ -4,5 +4,5 @@ output/
 intermediates/
 images/
 __pycache__/
-utils/sample_akaze/*.jpg
-utils/sample_akaze/cmp_image
+*.jpg
+*.csv
