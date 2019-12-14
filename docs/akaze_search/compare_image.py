@@ -17,6 +17,9 @@ def read_des(csv_path):
     return des
 
 def query_formatting(hojo_name):
+    if os.path.exists("./query/{}_q.jpg".format(hojo_name)):
+        return "{}_q".format(hojo_name)
+
     im = Image.open("./query/{}.jpg".format(hojo_name))
     im = im.convert("L").filter(ImageFilter.MedianFilter())
     w, h = im.size
@@ -43,12 +46,14 @@ def compare_image(query_name):
     #検索開始
     ranking = []
     search_start = time.time()
+
     #feature_vecs_csv/にある各法帖の各ページ各行の特徴量と比較
     for target in search_targets:
         csv_names = os.listdir("./feature_vecs_csv/{}".format(target))
         if ".DS_Store" in csv_names:
             csv_names.remove("DS_Store")
 
+        #各行のAKAZE特徴量を比較
         for csv in csv_names:
             des = read_des("./feature_vecs_csv/{}/{}".format(target, csv))
             if np.sum(des) == 0:
@@ -62,7 +67,7 @@ def compare_image(query_name):
             for m, n in matches:
                 if m.distance < match_param*n.distance:
                     point += 1
-            ranking.append([point, csv])
+            ranking.append([point, target, csv.replace("{}_".format(target), "").replace(".csv", "")])
 
     search_end = time.time()
     ranking.sort()
@@ -74,4 +79,6 @@ def compare_image(query_name):
 
 
 if __name__ == "__main__":
-    compare_image(query_formatting("hojo5"))
+    print("Select query name: saikiku, kokonoka, marusai, or marukyu")
+    query_name = input()
+    compare_image(query_formatting(query_name))
