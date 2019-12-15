@@ -127,7 +127,7 @@ def compare_image(query_name):
         else:
             current_num += 1
 
-        if total_show_count == 10:
+        if total_show_count == 5:
             break
 
     print("Search time: {}".format(search_end-search_start))
