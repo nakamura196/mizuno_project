@@ -39,23 +39,27 @@ def compare_image(query_name):
 
     kp_q, des_q = detector.detectAndCompute(img, None)
 
-    search_targets = os.listdir("./feature_vecs_csv")
-    if ".DS_Store" in search_targets:
-        search_targets.remove(".DS_Store")
+    hojo_features = os.listdir("./feature_vecs_csv")
+    if ".DS_Store" in hojo_features:
+        hojo_features.remove(".DS_Store")
 
     #検索開始
     ranking = []
+    hojo_count = {}
     search_start = time.time()
 
     #feature_vecs_csv/にある各法帖の各ページ各行の特徴量と比較
-    for target in search_targets:
-        csv_names = os.listdir("./feature_vecs_csv/{}".format(target))
+    for hojo_name in hojo_features:
+        csv_names = os.listdir("./feature_vecs_csv/{}".format(hojo_name))
         if ".DS_Store" in csv_names:
             csv_names.remove("DS_Store")
 
+        #検索結果で同じ法帖が多すぎないようにするための保持変数
+        hojo_count[hojo_name] = {"shown_count": 0}
+
         #各行のAKAZE特徴量を比較
         for csv in csv_names:
-            des = read_des("./feature_vecs_csv/{}/{}".format(target, csv))
+            des = read_des("./feature_vecs_csv/{}/{}".format(hojo_name, csv))
             if np.sum(des) == 0:
                 continue
 
@@ -67,15 +71,43 @@ def compare_image(query_name):
             for m, n in matches:
                 if m.distance < match_param*n.distance:
                     point += 1
-            ranking.append([point, target, csv.replace("{}_".format(target), "").replace(".csv", "")])
+
+            #検索結果がかぶらないようにする準備
+            data = csv.replace(".csv", "").split("_")
+            hojo_name   = data[0]
+            page        = data[1]
+            line_num    = data[2]
+            hojo_count[hojo_name][page] = 0
+
+            ranking.append([point, hojo_name, page, line_num])
 
     search_end = time.time()
     ranking.sort()
     ranking.reverse()
-    for i in range(10):
-        print(ranking[i])
 
-    print(search_end-search_start)
+    #被りすぎないように検索結果を表示
+    total_show_count = 0
+    while True:
+        point       = ranking[total_show_count][0]
+        hojo_name   = ranking[total_show_count][1]
+        page        = ranking[total_show_count][2]
+        line_num    = ranking[total_show_count][3]
+
+        #同一法帖は3つまで、同一法帖の同一ページは2つまで
+        if hojo_count[hojo_name][page] < 3 and hojo_count[hojo_name]["shown_count"] < 4:
+            hojo_count[hojo_name][page] += 1
+            hojo_count[hojo_name]["shown_count"] += 1
+            print("Resembleness: {}".format(point))
+            print("Hojo: {}".format(hojo_name))
+            print("Page: {}".format(page.replace("p", "")))
+            print("Line: {}".format(line_num.replace("line", "")))
+            print("------------------------------------------")
+
+            total_show_count += 1
+            if total_show_count == 10:
+                break
+
+    print("Search time: {}".format(search_end-search_start))
 
 
 if __name__ == "__main__":
