@@ -32,6 +32,17 @@ def query_formatting(hojo_name):
     im.save("./query/{}_q.jpg".format(hojo_name))
     return "{}_q".format(hojo_name)
 
+def call_image(hojo_name, page, line):
+    im_path = "./{}/{}_{}_{}.jpg".format(hojo_name, hojo_name, page, line)
+    im = Image.open(im_path)
+    return im
+
+def connect_image(im1, im2):
+    img = Image.new('L', (im1.width + im2.width, max(im1.height, im2.height)))
+    img.paste(im1, (0, 0))
+    img.paste(im2, (im1.width, 0))
+    return img
+
 def compare_image(query_name):
     #検索画像の読み込み
     img = cv2.imread("./query/{}.jpg".format(query_name))
@@ -88,6 +99,9 @@ def compare_image(query_name):
     #被りすぎないように検索結果を表示
     current_num = 0
     total_show_count = 0
+
+    #検索を画像で表示
+    im_right = Image.new("L", (1, 900), 0)
     while True:
         point       = ranking[current_num][0]
         hojo_name   = ranking[current_num][1]
@@ -104,6 +118,10 @@ def compare_image(query_name):
             print("Line: {}".format(line_num.replace("line", "")))
             print("------------------------------------------")
 
+            #結果画像を作成
+            im_left = call_image(hojo_name, page, line_num)
+            im_right = connect_image(im_left, im_right)
+
             current_num += 1
             total_show_count += 1
         else:
@@ -113,6 +131,8 @@ def compare_image(query_name):
             break
 
     print("Search time: {}".format(search_end-search_start))
+    im_right.save("search_result_by_{}.jpg".format(query_name))
+    im_right.show()
 
 
 if __name__ == "__main__":
