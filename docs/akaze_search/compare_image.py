@@ -86,15 +86,16 @@ def compare_image(query_name):
     ranking.reverse()
 
     #被りすぎないように検索結果を表示
+    current_num = 0
     total_show_count = 0
     while True:
-        point       = ranking[total_show_count][0]
-        hojo_name   = ranking[total_show_count][1]
-        page        = ranking[total_show_count][2]
-        line_num    = ranking[total_show_count][3]
+        point       = ranking[current_num][0]
+        hojo_name   = ranking[current_num][1]
+        page        = ranking[current_num][2]
+        line_num    = ranking[current_num][3]
 
         #同一法帖は3つまで、同一法帖の同一ページは2つまで
-        if hojo_count[hojo_name][page] < 3 and hojo_count[hojo_name]["shown_count"] < 4:
+        if hojo_count[hojo_name][page] < 2 and hojo_count[hojo_name]["shown_count"] < 3:
             hojo_count[hojo_name][page] += 1
             hojo_count[hojo_name]["shown_count"] += 1
             print("Resembleness: {}".format(point))
@@ -103,9 +104,13 @@ def compare_image(query_name):
             print("Line: {}".format(line_num.replace("line", "")))
             print("------------------------------------------")
 
+            current_num += 1
             total_show_count += 1
-            if total_show_count == 10:
-                break
+        else:
+            current_num += 1
+
+        if total_show_count == 10:
+            break
 
     print("Search time: {}".format(search_end-search_start))
 
