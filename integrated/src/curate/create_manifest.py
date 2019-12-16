@@ -14,7 +14,7 @@ def generate_line_place(page, lines, RESIZE_RATIO):
     return line_description
 
 
-def create_manifest(hojo_name, characterIsBlack=False):
+def create_curation(hojo_name, characterIsBlack=False):
     RESIZE_RATIO = 3
 
     #読み込み準備

@@ -1,5 +1,5 @@
 import curate_images
-import create_manifest
+import create_curation
 import os
 
 if __name__ == "__main__":
@@ -9,5 +9,5 @@ if __name__ == "__main__":
     if not os.path.exists("../../output/{}/curated_lines".format(hojo_name)):
         os.mkdir("../../output/{}/curated_lines".format(hojo_name))
 
-    create_manifest.create_manifest(hojo_name, characterIsBlack)
+    create_curation.create_curation(hojo_name, characterIsBlack)
     #curate_images.curate_images(hojo_name)
