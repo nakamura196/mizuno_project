@@ -66,6 +66,8 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"].append({"label":"作品名", "value":""})
             member["metadata"].append({"label":"行", "value":""})
             member["metadata"].append({"label":"備考", "value":""})
+            member["metadata"].append({"label":"Page", "value":""})
+            member["metadata"].append({"label":"Pixel line", "value":""})
             selection["members"].append(member)
 
     iiif_json["selections"].append(selection)
