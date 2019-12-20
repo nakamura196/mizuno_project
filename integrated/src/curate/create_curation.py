@@ -3,7 +3,7 @@
 import json, os
 import hashlib
 
-def generate_line_place(page, lines, RESIZE_RATIO):
+def generate_line_place(lines, RESIZE_RATIO):
     line_description = []
     for line in lines:
         x1, x2, y1, y2 = line[0], line[1], line[2], line[3]
@@ -57,7 +57,7 @@ def create_curation(hojo_name, characterIsBlack=False):
         lines = line_place["p{}".format(page)]
 
         #memberを作成
-        line_description = generate_line_place(page, lines, RESIZE_RATIO)
+        line_description = generate_line_place(lines, RESIZE_RATIO)
         for i in range(len(line_description)):
             member = {"@type":"sc:Canvas"}
             member["@id"]   = canvas_id+line_description[i]
@@ -66,15 +66,15 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"].append({"label":"作品名", "value":""})
             member["metadata"].append({"label":"行", "value":""})
             member["metadata"].append({"label":"備考", "value":""})
-            member["metadata"].append({"label":"Page", "value":""})
-            member["metadata"].append({"label":"Pixel line", "value":""})
+            member["metadata"].append({"label":"Page", "value":page})
+            member["metadata"].append({"label":"Pixel line", "value":i}) #iが左から0始まりで数えたピクセル行
             selection["members"].append(member)
 
     iiif_json["selections"].append(selection)
 
     #出力
     output = json.dumps(iiif_json)
-    with open("../../output/{}/{} curation.json".format(hojo_name, hojo_name), "w") as f:
+    with open("../../output/{}/{}.json".format(hojo_name, hojo_name), "w") as f:
         f.write(output)
 
     with open("/Users/aquan/git/mizuno_project/docs/curation/{} curation.json".format(hojo_name), "w") as f:
