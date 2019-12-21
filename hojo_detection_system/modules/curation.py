@@ -3,24 +3,24 @@ import hashlib
 import time
 
 #同じキーを持つ辞書のリストから適切な値を取り出す
-def getValue(target, items):
-    values = [x['value'] for x in items if 'label' in x and 'value' in x and x['label'] == target]
-    return values[0] if values else None
+def get_value(target, metadata):
+    values = [x["value"] for x in metadata if x["label"] == target]
+    return values[0]
 
 def generate_curationList(ranking_top5_hojo):
     #準備としてcurationを全部持っておく
-    curations = os.listdir("../curation")
+    curations = os.listdir("./curation")
     if ".DS_Store" in curations:
         curations.remove(".DS_Store")
 
     curation_of_search_target = {}
     for curation in curations:
         hojo_name = curation.replace(".json", "")
-        with open("../curation/{}".format(curation), "r") as f:
+        with open("./curation/{}".format(curation), "r") as f:
             curation_of_search_target[hojo_name] = json.load(f)
 
     #なんか必要なやつ
-    identifier = hashlib.sha1(time.time().encode()).hexdigest()
+    identifier = hashlib.sha1(str(time.time()).encode()).hexdigest()
 
     #全体の大枠を作る
     curationList = {}
@@ -37,38 +37,42 @@ def generate_curationList(ranking_top5_hojo):
     for list_ in ranking_top5_hojo:
         #point = list_[0]
         hojo_name   = list_[1]
-        page        = list_[2]
-        line_num    = list_[3]
+        #あとでこの辺りの表記の統一をはかるべし
+        page        = int(list_[2].replace("p", ""))
+        line_num    = int(list_[3].replace("line", ""))
+
+        print(hojo_name)
+        print(page)
+        print(line_num)
 
         if not hojo_name in sel_dic.keys():
+            #まだ登録されていない作品名ならselectionを新たに作る
             selection = {}
             selection["@id"]       = "{}/range{}".format(curationList["@id"], range_num)
             selection["@type"]     = "sc:Range"
             selection["label"]     = "Curation by Hojo Search System"
             selection["members"]   = []
-            selection["within"] = curation_of_search_target[hojo_name]["selections"]["within"]
+            selection["within"] = curation_of_search_target[hojo_name]["selections"][0]["within"]
 
             #該当するmemberを探す（あとで関数にしよう）
-            members = curation_of_search_target[hojo_name]["selections"]["members"]
+            members = curation_of_search_target[hojo_name]["selections"][0]["members"]
             for member in members:
-                p = getValue("Page", member["metadata"])
-                if p == page:
-                    l = getValue("Pixel line", member["metadata"])
-                    if l == line_num:
-                        selection["members"].append(member)
+                p = get_value("Page", member["metadata"])
+                l = get_value("Pixel line", member["metadata"])
+                if p == page and l == line_num:
+                    selection["members"].append(member)
 
             sel_dic[hojo_name] = selection
             range_num += 1
         else:
             selection = sel_dic[hojo_name]
             #該当するmemberを探す（あとで関数にしよう）
-            members = curation_of_search_target[hojo_name]["selections"]["members"]
+            members = curation_of_search_target[hojo_name]["selections"][0]["members"]
             for member in members:
-                p = getValue("Page", member["metadata"])
-                if p == page:
-                    l = getValue("Pixel line", member["metadata"])
-                    if l == line_num:
-                        selection["members"].append(member)
+                p = get_value("Page", member["metadata"])
+                l = get_value("Pixel line", member["metadata"])
+                if p == page and l == line_num:
+                    selection["members"].append(member)
 
     for key in sel_dic.keys():
         curationList["selections"].append(sel_dic[key])

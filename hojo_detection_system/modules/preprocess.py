@@ -1,25 +1,25 @@
-from PIL import Image
+from PIL import Image, ImageFilter
 import os
 
 def resize():
     RESIZE_RATIO = 3
 
-    query_path = "../query/query.jpg"
+    query_path = "./query/query.jpg"
 
     query = Image.open(query_path)
     weight, height = query.size
     resized_query = query.resize((int(weight/RESIZE_RATIO),int(height/RESIZE_RATIO)))
-    resized_query.save("../query/resized.jpg")
+    resized_query.save("./query/resized.jpg")
 
 def filter():
-    im = Image.open("../query/resized.jpg")
+    im = Image.open("./query/resized.jpg")
     w, h = im.size
 
     im.filter(ImageFilter.MedianFilter(size=3))
-    im.save("../query/filtered.jpg")
+    im.save("./query/filtered.jpg")
 
 def back_black(characterIsBlack=False):
-    im = Image.open("../query/filtered.jpg")
+    im = Image.open("./query/filtered.jpg")
     width, height = im.size
     im = im.convert("L")
 
@@ -40,4 +40,4 @@ def back_black(characterIsBlack=False):
                 if brightness < boundary:
                     im.putpixel((x, y), 0)
 
-    im.save("../query/preprocessed.jpg")
+    im.save("./query/preprocessed.jpg")

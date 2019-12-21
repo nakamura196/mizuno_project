@@ -18,12 +18,12 @@ def read_des(csv_path):
 
 def compare_image():
     #検索画像の読み込み
-    img = cv2.imread("../query/preprocessed.jpg")
+    img = cv2.imread("./query/preprocessed.jpg")
     detector = cv2.AKAZE_create()
 
     kp_q, des_q = detector.detectAndCompute(img, None)
 
-    hojo_features = os.listdir("../feature_vecs_csv")
+    hojo_features = os.listdir("./feature_vecs_csv")
     if ".DS_Store" in hojo_features:
         hojo_features.remove(".DS_Store")
 
@@ -33,7 +33,7 @@ def compare_image():
 
     #feature_vecs_csv/にある各法帖の各ページ各行の特徴量と比較
     for hojo_name in hojo_features:
-        csv_names = os.listdir("../feature_vecs_csv/{}".format(hojo_name))
+        csv_names = os.listdir("./feature_vecs_csv/{}".format(hojo_name))
         if ".DS_Store" in csv_names:
             csv_names.remove("DS_Store")
 
@@ -42,7 +42,7 @@ def compare_image():
 
         #各行のAKAZE特徴量を比較
         for csv in csv_names:
-            des = read_des("../feature_vecs_csv/{}/{}".format(hojo_name, csv))
+            des = read_des("./feature_vecs_csv/{}/{}".format(hojo_name, csv))
             if np.sum(des) == 0:
                 continue
 
@@ -72,6 +72,9 @@ def compare_image():
     top5 = []
 
     while True:
+        hojo_name = ranking[idx][1]
+        page = ranking[idx][2]
+
         #同一法帖は3つまで、同一法帖の同一ページは2つまで
         if hojo_count[hojo_name][page] < 2 and hojo_count[hojo_name]["shown_count"] < 3:
             hojo_count[hojo_name][page] += 1
