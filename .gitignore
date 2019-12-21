@@ -5,4 +5,4 @@ intermediates/
 images/
 __pycache__/
 *.jpg
-*.csv
+docs/akaze_search/feature_vecs_csv/*
