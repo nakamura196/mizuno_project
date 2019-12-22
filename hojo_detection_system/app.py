@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from modules import compare, curation, download, preprocess
+from flask_cors import CORS
 
 #インスタンス化
 app = Flask(__name__)
+
+CORS(app)
+
+app.config['JSON_AS_ASCII'] = False  # 日本語文字化け対策
+app.config["JSON_SORT_KEYS"] = False  # ソートをそのまま
 
 #アプリケーション用のルーティングを記述
 @app.route('/')
