@@ -35,7 +35,7 @@ def compare_image():
     for hojo_name in hojo_features:
         csv_names = os.listdir("./feature_vecs_csv/{}".format(hojo_name))
         if ".DS_Store" in csv_names:
-            csv_names.remove("DS_Store")
+            csv_names.remove(".DS_Store")
 
         #検索結果で同じ法帖が多すぎないようにするための保持変数
         hojo_count[hojo_name] = {"shown_count": 0}
