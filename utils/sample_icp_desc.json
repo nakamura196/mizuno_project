@@ -21,7 +21,7 @@ description: [
 ],
 provider: "",
 homepage: "",
-exportUrl: "",
+exportUrl: "http://diyhistory.org:5001/hojodetection",
 method: "POST",
 enctype: "multipart/form-data",
 paramMap: {
