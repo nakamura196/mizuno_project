@@ -3,9 +3,17 @@ import hashlib
 import time
 
 #同じキーを持つ辞書のリストから適切な値を取り出す
-def get_value(target, metadata):
-    values = [x["value"] for x in metadata if x["label"] == target]
+def get_value(target_key, metadata):
+    values = [x["value"] for x in metadata if x["label"] == target_key]
     return values[0]
+
+def insert_value(target_key, value, member):
+    for dic in member["metadata"]:
+        if dic["label"] == target_key:
+            dic["value"] = value
+            break
+
+    return member
 
 def generate_curationList(ranking_top5_hojo):
     #準備としてcurationを全部持っておく
@@ -35,15 +43,11 @@ def generate_curationList(ranking_top5_hojo):
     sel_dic = {}
 
     for list_ in ranking_top5_hojo:
-        #point = list_[0]
+        point = int(list_[0])
         hojo_name   = list_[1]
         #あとでこの辺りの表記の統一をはかるべし
         page        = int(list_[2].replace("p", ""))
         line_num    = int(list_[3].replace("line", ""))
-
-        print(hojo_name)
-        print(page)
-        print(line_num)
 
         if not hojo_name in sel_dic.keys():
             #まだ登録されていない作品名ならselectionを新たに作る
@@ -60,7 +64,7 @@ def generate_curationList(ranking_top5_hojo):
                 p = get_value("Page", member["metadata"])
                 l = get_value("Pixel line", member["metadata"])
                 if p == page and l == line_num:
-                    selection["members"].append(member)
+                    selection["members"].append(insert_value("Resembleness", point, member))
 
             sel_dic[hojo_name] = selection
             range_num += 1
@@ -72,7 +76,7 @@ def generate_curationList(ranking_top5_hojo):
                 p = get_value("Page", member["metadata"])
                 l = get_value("Pixel line", member["metadata"])
                 if p == page and l == line_num:
-                    selection["members"].append(member)
+                    selection["members"].append(insert_value("Resembleness", point, member))
 
     for key in sel_dic.keys():
         curationList["selections"].append(sel_dic[key])

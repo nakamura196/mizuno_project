@@ -68,6 +68,7 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"].append({"label":"備考", "value":""})
             member["metadata"].append({"label":"Page", "value":page})
             member["metadata"].append({"label":"Pixel line", "value":i}) #iが左から0始まりで数えたピクセル行
+            member["metadata"].append({"label":"Resembleness", "value":0})
             selection["members"].append(member)
 
     iiif_json["selections"].append(selection)
@@ -75,6 +76,9 @@ def create_curation(hojo_name, characterIsBlack=False):
     #出力
     output = json.dumps(iiif_json)
     with open("../../output/{}/{}.json".format(hojo_name, hojo_name), "w") as f:
+        f.write(output)
+
+    with open("/Users/aquan/git/mizuno_project/hojo_detection_system/curation/{}.json".format(hojo_name, hojo_name), "w") as f:
         f.write(output)
 
     with open("/Users/aquan/git/mizuno_project/docs/curation/{} curation.json".format(hojo_name), "w") as f:
