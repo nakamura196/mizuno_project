@@ -25,4 +25,7 @@ def create_csv(hojo_name):
         df.to_csv("./feature_vecs_csv/{}/{}".format(hojo_name, image.replace(".jpg", ".csv")), index=False)
 
 if __name__ == "__main__":
-    create_csv("泉州本淳化閣帖 八 [A006099-05]")
+    hojo_list = ["泉州本淳化閣帖 八 [A006099-05]", "偽絳帖 三 [A005936-03]", "淳化閣帖第1-10。[8]", "星鳳楼帖 卯 [A005935-04]"]
+
+    for hojo_name in hojo_list:
+        create_csv(hojo_name)

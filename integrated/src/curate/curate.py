@@ -10,6 +10,8 @@ if __name__ == "__main__":
     for hojo_name in hojo_list:
         if not os.path.exists("../../output/{}/curated_lines".format(hojo_name)):
             os.mkdir("../../output/{}/curated_lines".format(hojo_name))
+        if not os.path.exists("../../../docs/akaze_search/{}".format(hojo_name)):
+            os.mkdir("../../../docs/akaze_search/{}".format(hojo_name))
 
         create_curation.create_curation(hojo_name, characterIsBlack)
         #curate_images.curate_images(hojo_name)

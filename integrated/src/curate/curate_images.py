@@ -21,5 +21,6 @@ def curate_images(hojo_name):
             copied_im = im.copy()
             cropped_im = copied_im.crop((x1, y1, x2, y2))
             cropped_im.save("../../output/{}/curated_lines/{}_p{}_line{}.jpg".format(hojo_name, hojo_name, page, line_count))
+            cropped_im.save("../../../docs/akaze_search/{}/{}_p{}_line{}.jpg".format(hojo_name, hojo_name, page, line_count))
             line_count += 1
         print("Page {}: curating finished".format(page))

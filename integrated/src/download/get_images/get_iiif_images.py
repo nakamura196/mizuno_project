@@ -13,7 +13,7 @@ def get_iiif_images(info, hojo_name):
         f.write("{}\n".format(info["identifier"]))
 
     sequence_num = len(info)-2 #@idとidentifierを除いた数
-    page = 1
+    page = 293
     for number in range(1, sequence_num+1):
         for sequence in info["sequence_{}".format(number)]:
             canvas, image_url = sequence[0], sequence[1]
