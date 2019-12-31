@@ -15,6 +15,14 @@ def insert_value(target_key, value, member):
 
     return member
 
+def find_member(curations, hojo_name, page, line_num):
+    members = curations[hojo_name]["selections"][0]["members"]
+    for member in members:
+        p = get_value("Page", member["metadata"])
+        l = get_value("Pixel line", member["metadata"])
+        if p == page and l == line_num:
+            return member
+
 def generate_curationList(ranking_top5_hojo):
     #準備としてcurationを全部持っておく
     curations = os.listdir("./curation")
@@ -35,7 +43,7 @@ def generate_curationList(ranking_top5_hojo):
     curationList["@context"]   = ["http://iiif.io/api/presentation/2/context.json", "http://codh.rois.ac.jp/iiif/curation/1/context.json"]
     curationList["@id"]        = "https://mp.ex.nii.ac.jp/api/curation/json/" + identifier
     curationList["@type"]      = "cr:Curation"
-    curationList["label"]      = "https://mp.ex.nii.ac.jp/api/curation/json/" + identifier
+    curationList["label"]      = "https://mp.ex.nii.ac.jp/api/curation/json/" + "hojo-detection-system-"identifier
     curationList["selections"] = []
 
     #法帖ごとのselectionを作る
@@ -58,26 +66,24 @@ def generate_curationList(ranking_top5_hojo):
             selection["members"]   = []
             selection["within"] = curation_of_search_target[hojo_name]["selections"][0]["within"]
 
-            #該当するmemberを探す（あとで関数にしよう）
-            members = curation_of_search_target[hojo_name]["selections"][0]["members"]
-            for member in members:
-                p = get_value("Page", member["metadata"])
-                l = get_value("Pixel line", member["metadata"])
-                if p == page and l == line_num:
-                    selection["members"].append(insert_value("Resembleness", point, member))
+            #該当するmemberを探す
+            member = find_member(curation_of_search_target, hojo_name, page, line_num)
+            selection["members"].append(insert_value("Resembleness", point, member))
 
+            #作ったselectionを登録して次へ
             sel_dic[hojo_name] = selection
             range_num += 1
         else:
+            #登録済みのselectionなら読み込んで付け足す
             selection = sel_dic[hojo_name]
-            #該当するmemberを探す（あとで関数にしよう）
-            members = curation_of_search_target[hojo_name]["selections"][0]["members"]
-            for member in members:
-                p = get_value("Page", member["metadata"])
-                l = get_value("Pixel line", member["metadata"])
-                if p == page and l == line_num:
-                    selection["members"].append(insert_value("Resembleness", point, member))
+            #該当するmemberを探す
+            member = find_member(curation_of_search_target, hojo_name, page, line_num)
+            selection["members"].append(insert_value("Resembleness", point, member))
 
+            #更新
+            sel_dic[hojo_name] = selection
+
+    #作ったselectionをcurationlistに登録
     for key in sel_dic.keys():
         curationList["selections"].append(sel_dic[key])
 

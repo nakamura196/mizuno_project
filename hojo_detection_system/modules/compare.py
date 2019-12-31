@@ -79,8 +79,8 @@ def compare_image():
         if hojo_count[hojo_name][page] < 2 and hojo_count[hojo_name]["shown_count"] < 3:
             hojo_count[hojo_name][page] += 1
             hojo_count[hojo_name]["shown_count"] += 1
-            idx += 1
             top5.append(ranking[idx])
+            idx += 1
         else:
             idx += 1
 
