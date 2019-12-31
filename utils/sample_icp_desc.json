@@ -22,7 +22,7 @@
 "provider": "",
 "homepage": "",
 "exportUrl": "http://diyhistory.org:5001/hojodetection",
-"method": "POST",
+"method": "GET",
 "enctype": "multipart/form-data",
 "paramMap": {
 "image": "url"
