@@ -61,7 +61,7 @@ def create_curation(hojo_name, characterIsBlack=False):
         for i in range(len(line_description)):
             member = {"@type":"sc:Canvas"}
             member["@id"]   = canvas_id+line_description[i]
-            member["label"] = "Page-{} Pixel-base line {}".format(page, i)
+            member["label"] = "{} {}ページ {}行目（画像処理ベース）".format(hojo_name, page, i)
             member["metadata"] = []
             member["metadata"].append({"label":"作品名", "value":""})
             member["metadata"].append({"label":"行", "value":""})
@@ -69,6 +69,7 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"].append({"label":"Page", "value":page})
             member["metadata"].append({"label":"Pixel line", "value":i}) #iが左から0始まりで数えたピクセル行
             member["metadata"].append({"label":"Resembleness", "value":0})
+            #member["related"] = "http://codh.rois.ac.jp/software/iiif-curation-viewer/demo/?manifest=https://diyhistory.org/uparl/omeka/oa/collections/{}/manifest.json&pos={}&lang=ja".format(, page)
             selection["members"].append(member)
 
     iiif_json["selections"].append(selection)
