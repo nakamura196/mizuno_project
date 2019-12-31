@@ -12,7 +12,8 @@ def resize():
     resized_query.save("./query/resized.jpg")
 
 def filter():
-    im = Image.open("./query/resized.jpg")
+    #im = Image.open("./query/resized.jpg")
+    im = Image.open("./query/query.jpg")
     w, h = im.size
 
     im.filter(ImageFilter.MedianFilter(size=3))
