@@ -5,7 +5,9 @@ intermediates/
 images/
 __pycache__/
 *.jpg
+*.zip
 docs/akaze_search/
 docs/feature_vector_test
 docs/preprocessing
 hojo_detection_system/feature_vecs_csv
+hojo_detection_system/results/
