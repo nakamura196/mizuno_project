@@ -8,7 +8,7 @@ from PIL import Image
 
 if __name__ == "__main__":
     #準備
-    hojo_name = "星鳳楼帖 卯 [A005935-04]"
+    hojo_name = "淳化閣帖"
     characterIsBlack = False
     contents    = os.listdir("../../input/images/{}/".format(hojo_name))
     if ".DS_Store" in contents:
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         os.mkdir("../../output/{}/preprocessed/back_black/".format(hojo_name))
 
     #画像をリサイズ（関数内でマルチプロセス化）
-    resize.resize_hojo(hojo_name)
+    #resize.resize_hojo(hojo_name)
 
     #GCPから文字サイズを取得
     #もうあったらやらない
