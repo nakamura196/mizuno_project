@@ -69,7 +69,7 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"].append({"label":"Page", "value":page})
             member["metadata"].append({"label":"Pixel line", "value":i}) #iが左から0始まりで数えたピクセル行
             member["metadata"].append({"label":"Resembleness", "value":0})
-            #member["related"] = "http://codh.rois.ac.jp/software/iiif-curation-viewer/demo/?manifest=https://diyhistory.org/uparl/omeka/oa/collections/{}/manifest.json&pos={}&lang=ja".format(, page)
+            member["related"] = "http://codh.rois.ac.jp/software/iiif-curation-viewer/demo/?curation=https://raw.githubusercontent.com/nakamura196/mizuno_project/master/docs/curation/{}.json&mode=annotation&pos={}&lang=ja".format(hojo_name, page)
             selection["members"].append(member)
 
     iiif_json["selections"].append(selection)
@@ -82,5 +82,5 @@ def create_curation(hojo_name, characterIsBlack=False):
     with open("/Users/aquan/git/mizuno_project/hojo_detection_system/curation/{}.json".format(hojo_name, hojo_name), "w") as f:
         f.write(output)
 
-    with open("/Users/aquan/git/mizuno_project/docs/curation/{} curation.json".format(hojo_name), "w") as f:
+    with open("/Users/aquan/git/mizuno_project/docs/curation/{}.json".format(hojo_name), "w") as f:
         f.write(output)
