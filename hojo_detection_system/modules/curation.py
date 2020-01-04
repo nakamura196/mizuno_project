@@ -43,7 +43,7 @@ def generate_curationList(ranking_top5_hojo):
     curationList["@context"]   = ["http://iiif.io/api/presentation/2/context.json", "http://codh.rois.ac.jp/iiif/curation/1/context.json"]
     curationList["@id"]        = "https://mp.ex.nii.ac.jp/api/curation/json/" + identifier
     curationList["@type"]      = "cr:Curation"
-    curationList["label"]      = "https://mp.ex.nii.ac.jp/api/curation/json/" + "hojo-detection-system-"identifier
+    curationList["label"]      = "https://mp.ex.nii.ac.jp/api/curation/json/" + "hojo-detection-system-"+identifier
     curationList["selections"] = []
 
     #法帖ごとのselectionを作る
