@@ -48,6 +48,7 @@ def create_curation(hojo_name, characterIsBlack=False):
         line_place = json.load(f)
 
     page_leng = len(line_place)
+    pos_count = 1
     #行探知
     for page in range(1, page_leng+1):
         #準備
@@ -69,7 +70,8 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"].append({"label":"Page", "value":page})
             member["metadata"].append({"label":"Pixel line", "value":i}) #iが左から0始まりで数えたピクセル行
             member["metadata"].append({"label":"Resembleness", "value":0})
-            member["related"] = "http://codh.rois.ac.jp/software/iiif-curation-viewer/demo/?curation=https://raw.githubusercontent.com/nakamura196/mizuno_project/master/docs/curation/{}.json&mode=annotation&pos={}&lang=ja".format(hojo_name, page)
+            member["related"] = "http://codh.rois.ac.jp/software/iiif-curation-viewer/demo/?curation=https://raw.githubusercontent.com/nakamura196/mizuno_project/master/docs/curation/{}.json&pos={}&lang=ja".format(hojo_name, pos_count)
+            pos_count += 1
             selection["members"].append(member)
 
     iiif_json["selections"].append(selection)
