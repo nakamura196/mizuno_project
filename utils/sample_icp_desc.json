@@ -21,7 +21,7 @@
 ],
 "provider": "",
 "homepage": "",
-"exportUrl": "http://diyhistory.org:5001/hojodetection",
+"exportUrl": "http://diyhistory.org:5001/curation",
 "method": "GET",
 "enctype": "multipart/form-data",
 "paramMap": {
