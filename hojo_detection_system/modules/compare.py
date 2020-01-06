@@ -59,7 +59,7 @@ def compare_image():
             data = csv.replace(".csv", "").split("_")
             hojo_name   = data[0]
             page        = data[1]
-            line_num    = data[2] -1 #画像やCSVファイルの名前は1-indexed, 処理上は0-indexed
+            line_num    = data[2]
             hojo_count[hojo_name][page] = 0
 
             ranking.append([point, hojo_name, page, line_num])

@@ -20,7 +20,7 @@ def find_member(curations, hojo_name, page, line_num):
     for member in members:
         p = get_value("Page", member["metadata"])
         l = get_value("Pixel line", member["metadata"])
-        if p == page and l == line_num:
+        if p == page and l == line_num-1:#画像やCSVファイルの名前は1-indexed, 処理上は0-indexed
             return member
 
 def generate_curationList(ranking_top5_hojo):
