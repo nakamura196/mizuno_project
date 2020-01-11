@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import time
 from PIL import Image, ImageFilter
+from multiprocessing import Pool
 
 #csvから特徴量を読み込む
 def read_des(csv_path):
@@ -15,6 +16,27 @@ def read_des(csv_path):
     des = des_int64.astype(np.uint8)
 
     return des
+
+def _compare(iter_):
+    des = iter_[0]
+    des_q = iter_[1]
+    csv_name = iter_[2]
+
+    bf = cv2.BFMatcher()
+    matches = bf.knnMatch(des, des_q, k=2)
+
+    point = 0
+    match_param = 0.65
+    for m, n in matches:
+        if m.distance < match_param*n.distance:
+            point += 1
+
+    data = csv_name.replace(".csv", "").split("_")
+    hojo_name   = data[0]
+    page        = data[1]
+    line_num    = data[2]
+
+    return [point, hojo_name, page, line_num]
 
 def compare_image():
     #検索画像の読み込み
@@ -63,7 +85,25 @@ def compare_image():
             hojo_count[hojo_name][page] = 0
 
             ranking.append([point, hojo_name, page, line_num])
+        """
+        iter_ = []
+        for csv in csv_names:
+            des = read_des("./feature_vecs_csv/{}/{}".format(hojo_name, csv))
+            if np.sum(des) == 0:
+                continue
 
+            #検索結果がかぶらないようにする準備
+            data = csv.replace(".csv", "").split("_")
+            hojo_name   = data[0]
+            page        = data[1]
+            hojo_count[hojo_name][page] = 0
+            iter_.append((des, des_q, csv))
+
+        with Pool(processes=3) as pool:
+            ranks = pool.map(_compare, iter_)
+
+        ranking.append(ranks)
+        """
     ranking.sort()
     ranking.reverse()
 
@@ -84,7 +124,7 @@ def compare_image():
         else:
             idx += 1
 
-        if len(top5) == 5:
+        if len(top5) == 15:
             break
 
     return top5
