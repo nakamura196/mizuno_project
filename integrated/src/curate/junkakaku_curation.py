@@ -9,13 +9,13 @@ def generate_line_place(lines, RESIZE_RATIO):
         x1, x2, y1, y2 = line[0], line[1], line[2], line[3]
         w = x2 - x1
         h = y2 - y1
-        line_description.append("#xywh={},{},{},{}".format(RESIZE_RATIO*x1, y1, RESIZE_RATIO*w, RESIZE_RATIO*h))
+        line_description.append("#xywh={},{},{},{}".format(int(RESIZE_RATIO*x1), y1, int(RESIZE_RATIO*w), int(RESIZE_RATIO*h)))
 
     return line_description
 
 
 def create_curation(hojo_name, characterIsBlack=False):
-    RESIZE_RATIO = 5
+    RESIZE_RATIO = 3*1.5282
 
     #読み込み準備
     hojo_path   = "../../input/images/{}/".format(hojo_name)

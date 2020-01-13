@@ -67,7 +67,7 @@ def curator():
 
 @app.route("/hojotest")
 def _test():
-    url = "https://kotenseki.nijl.ac.jp/api/iiif/100065344/v1/0204/0204-011705/0204-011705-0227.tif/1768,3168,376,1016/full/0/default.jpg"
+    url = "https://www.dl.ndl.go.jp/api/iiif/2587034/R0000015/2808,4052,496,1288/full/0/default.jpg"
     #"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/168954/5032,4112,632,1640/full/0/default.jpg" #せんしゅう
     #"https://www.dl.ndl.go.jp/api/iiif/2587034/R0000015/2808,4052,496,1288/full/0/default.jpg" #じゅんかかく1-10
     #"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/167904/4872,2848,568,1344/full/0/default.jpg" #せいほう

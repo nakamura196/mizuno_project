@@ -16,7 +16,7 @@ if __name__ == "__main__":
         if not os.path.exists("../../../docs/akaze_search/{}".format(hojo_name)):
             os.mkdir("../../../docs/akaze_search/{}".format(hojo_name))
 
-        create_curation.create_curation(hojo_name, characterIsBlack)
+        #create_curation.create_curation(hojo_name, characterIsBlack)
         #if hojo_name == "淳化閣帖":
-        curate_images.curate_images(hojo_name)
-        #junkakaku_curation.create_curation("淳化閣帖第1-10。[8]")
+        #curate_images.curate_images(hojo_name)
+        junkakaku_curation.create_curation("淳化閣帖第1-10。[8]")
