@@ -14,5 +14,5 @@ if __name__ == "__main__":
             os.mkdir("../../../docs/akaze_search/{}".format(hojo_name))
 
         create_curation.create_curation(hojo_name, characterIsBlack)
-        if hojo_name == "淳化閣帖第1-10。[8]":
+        if hojo_name == "淳化閣帖":
             curate_images.curate_images(hojo_name)
