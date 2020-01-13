@@ -20,7 +20,7 @@ def hojodetection(im_url):
         return
 
     #新規検索なら以降の処理をやる
-    im_url_resized = im_url.replace("full", "150,") #幅150より小さいクエリ画像についてはあとで検討する
+    im_url_resized = im_url.replace("full/0/default", "150,/0/default") #幅150より小さいクエリ画像についてはあとで検討する
     download_start = time.time()
     #クエリ画像をダウンロード
     download.download_image(im_url_resized)
@@ -67,7 +67,12 @@ def curator():
 
 @app.route("/hojotest")
 def _test():
-    url = "https://www.dl.ndl.go.jp/api/iiif/2587034/R0000015/2808,4052,496,1288/full/0/default.jpg"#"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/167904/4872,2848,568,1344/full/0/default.jpg"
+    url = "https://kotenseki.nijl.ac.jp/api/iiif/100065344/v1/0204/0204-011705/0204-011705-0227.tif/1768,3168,376,1016/full/0/default.jpg"
+    #"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/168954/5032,4112,632,1640/full/0/default.jpg" #せんしゅう
+    #"https://www.dl.ndl.go.jp/api/iiif/2587034/R0000015/2808,4052,496,1288/full/0/default.jpg" #じゅんかかく1-10
+    #"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/167904/4872,2848,568,1344/full/0/default.jpg" #せいほう
+    #"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/168120/4552,2984,488,1296/full/0/default.jpg" #ぎほう
+    #"https://kotenseki.nijl.ac.jp/api/iiif/100065344/v1/0204/0204-011705/0204-011705-0227.tif/1768,3168,376,1016/full/0/default.jpg" #じゅんかかく
     hojodetection(url)
     hashed_im_url = hashlib.sha1(url.encode()).hexdigest()
     with open("./results/{}.json".format(hashed_im_url), "r") as f:

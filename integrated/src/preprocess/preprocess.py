@@ -24,7 +24,7 @@ if __name__ == "__main__":
         os.mkdir("../../output/{}/preprocessed/back_black/".format(hojo_name))
 
     #画像をリサイズ（関数内でマルチプロセス化）
-    #resize.resize_hojo(hojo_name)
+    resize.resize_hojo(hojo_name)
 
     #GCPから文字サイズを取得
     #もうあったらやらない

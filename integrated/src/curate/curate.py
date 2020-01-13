@@ -9,12 +9,14 @@ if __name__ == "__main__":
 
 
     for hojo_name in hojo_list:
+        if hojo_name != "淳化閣帖第1-10。[8]":
+            continue
         if not os.path.exists("../../output/{}/curated_lines".format(hojo_name)):
             os.mkdir("../../output/{}/curated_lines".format(hojo_name))
         if not os.path.exists("../../../docs/akaze_search/{}".format(hojo_name)):
             os.mkdir("../../../docs/akaze_search/{}".format(hojo_name))
 
         create_curation.create_curation(hojo_name, characterIsBlack)
-        if hojo_name == "淳化閣帖":
-            curate_images.curate_images(hojo_name)
-        junkakaku_curation.create_curation("淳化閣帖第1-10。[8]")
+        #if hojo_name == "淳化閣帖":
+        curate_images.curate_images(hojo_name)
+        #junkakaku_curation.create_curation("淳化閣帖第1-10。[8]")

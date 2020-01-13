@@ -33,4 +33,4 @@ if __name__ == "__main__":
 
     #for hojo_name in hojo_list:
     #    create_csv(hojo_name)
-    create_csv("淳化閣帖")
+    create_csv("淳化閣帖第1-10。[8]")
