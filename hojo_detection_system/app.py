@@ -67,7 +67,7 @@ def curator():
 
 @app.route("/hojotest")
 def _test():
-    url = "https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/167904/4872,2848,568,1344/full/0/default.jpg"
+    url = "https://www.dl.ndl.go.jp/api/iiif/2587034/R0000015/2808,4052,496,1288/full/0/default.jpg"#"https://iiif.dl.itc.u-tokyo.ac.jp/repo/iiif-img/167904/4872,2848,568,1344/full/0/default.jpg"
     hojodetection(url)
     hashed_im_url = hashlib.sha1(url.encode()).hexdigest()
     with open("./results/{}.json".format(hashed_im_url), "r") as f:

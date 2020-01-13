@@ -1,5 +1,6 @@
 import curate_images
 import create_curation
+import junkakaku_curation
 import os
 
 if __name__ == "__main__":
@@ -16,3 +17,4 @@ if __name__ == "__main__":
         create_curation.create_curation(hojo_name, characterIsBlack)
         if hojo_name == "淳化閣帖":
             curate_images.curate_images(hojo_name)
+        junkakaku_curation.create_curation("淳化閣帖第1-10。[8]")
