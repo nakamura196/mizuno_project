@@ -66,6 +66,7 @@ def create_curation(hojo_name, characterIsBlack=False):
             member["metadata"] = []
             member["metadata"].append({"label":"作品名", "value":""})
             member["metadata"].append({"label":"行", "value":""})
+            member["metadata"].append({"label":"含まれる文字", "value":""})
             member["metadata"].append({"label":"備考", "value":""})
             member["metadata"].append({"label":"Page", "value":page})
             member["metadata"].append({"label":"Pixel line", "value":i}) #iが左から0始まりで数えたピクセル行
