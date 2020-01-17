@@ -72,7 +72,7 @@ def compare_image():
             matches = bf.knnMatch(des, des_q, k=2)
 
             point = 0
-            match_param = 0.8
+            match_param = 0.65
             for m, n in matches:
                 if m.distance < match_param*n.distance:
                     point += 1
