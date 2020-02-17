@@ -20,7 +20,7 @@ def generate_sameness(hojo_name1, hojo_name2):
 
     #割合試験を適用
     good = []
-    match_param = 0.7
+    match_param = 0.8
     point = 0
     for m,n in matches:
         if m.distance < match_param*n.distance:
@@ -31,9 +31,9 @@ def generate_sameness(hojo_name1, hojo_name2):
     output_name = "cmp_{}_and_{}".format(hojo_name1, hojo_name2)
     cv2.imwrite("./output/shift_result_{}_{}_{}.png".format(point, hojo_name1, hojo_name2), img3)
 
-    return point
-
 def query_formatting(hojo_name):
+    if os.path.exists("./{}_q.jpg".format(hojo_name)):
+        return "{}_q".format(hojo_name)
     im = Image.open("{}.jpg".format(hojo_name))
     im = im.convert("L").filter(ImageFilter.MedianFilter())
     w, h = im.size
@@ -46,7 +46,11 @@ def query_formatting(hojo_name):
     im.save("{}_q.jpg".format(hojo_name))
     return "{}_q".format(hojo_name)
 
-hojos = os.listdir("./cmp_image/")
+hojo = "泉州本淳化閣帖 八 [A006099-05]_p17_line3"
+generate_sameness(query_formatting("gihou_saikiku"), hojo)
+
+
+"""hojos = os.listdir("./cmp_image/")
 if ".DS_Store" in hojos:
     hojos.remove(".DS_Store")
 
@@ -54,3 +58,4 @@ for hojo in hojos:
     hojo = hojo.replace(".jpg", "")
     if hojo == "淳化閣帖第1-10。[8]_p15_line8":
         print(generate_sameness(query_formatting("marusai"), hojo))
+"""
