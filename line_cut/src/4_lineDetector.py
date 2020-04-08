@@ -98,7 +98,7 @@ def detect_divideline(iter_):
 
 if __name__ == "__main__":
     #法帖のリスト読み込み
-    hojos = os.listdir("../input/manifest")
+    hojos = os.listdir("../input/images")
     if ".DS_Store" in hojos:
         hojos.remove(".DS_Store")
 
